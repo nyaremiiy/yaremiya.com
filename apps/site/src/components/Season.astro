@@ -1,0 +1,218 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import { season } from '../lib/data';
+
+// Місяць під час збірки — лише запасний варіант; у браузері скрипт нижче бере поточну дату.
+const buildMonth = new Date().getMonth();
+const inRange = (m: number, from: number, to: number) => m >= from && m <= to;
+const rowsCount = season.rows.length;
+---
+
+<section id="season" class="section season" aria-labelledby="season-title">
+  <div class="container">
+    <div class="season__intro">
+      <Eyebrow icon="calendar-days">Сезон</Eyebrow>
+      <h2 id="season-title" class="h2">Що й коли у нас росте</h2>
+      <p class="lead">
+        Кожна рослина має свій час. Смуга показує місяці, коли її можна в нас купити, а підсвічений стовпчик — що
+        є просто зараз.
+      </p>
+    </div>
+
+    <div class="season__card card">
+      <div class="season__scroll" tabindex="0" role="region" aria-label="Сезонний календар, можна прокрутити">
+        <div
+          class="cal"
+          data-season
+          data-month={buildMonth}
+          style={`grid-template-rows: 40px repeat(${rowsCount}, 52px)`}
+        >
+          <div
+            class="cal__now"
+            data-now
+            aria-hidden="true"
+            style={`grid-column: ${buildMonth + 2}; grid-row: 1 / -1`}
+          >
+          </div>
+
+          <div class="cal__head-label" style="grid-column:1;grid-row:1">Рослина</div>
+          {season.months.map((m, i) => (
+            <div
+              class:list={['cal__month', { 'is-current': i === buildMonth }]}
+              data-month-index={i}
+              style={`grid-column:${i + 2};grid-row:1`}
+            >
+              <abbr title={season.monthsFull[i]}>{m}</abbr>
+            </div>
+          ))}
+
+          {season.rows.map((r, i) => (
+            <>
+              <div class="cal__name" style={`grid-column:1;grid-row:${i + 2}`}>
+                <strong>{r.name}</strong>
+                <span>{r.kind}</span>
+              </div>
+              <div class="cal__track" aria-hidden="true" style={`grid-row:${i + 2}`}></div>
+              <div
+                class:list={['cal__bar', { 'is-now': inRange(buildMonth, r.from, r.to) }]}
+                data-from={r.from}
+                data-to={r.to}
+                style={`grid-column:${r.from + 2} / ${r.to + 3};grid-row:${i + 2}`}
+              >
+                <span>
+                  {season.monthsFull[r.from]} – {season.monthsFull[r.to]}
+                </span>
+              </div>
+            </>
+          ))}
+        </div>
+      </div>
+
+      <div class="legend">
+        <span class="legend__item"><i class="legend__dot legend__dot--now"></i>Можна купити зараз</span>
+        <span class="legend__item"><i class="legend__dot"></i>Буде в інші місяці</span>
+        <span class="legend__note">Точні дати залежать від погоди — напишіть, підкажемо.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .season__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 40px;
+  }
+  .season__card { padding: 28px 32px; }
+
+  .season__scroll {
+    overflow-x: auto;
+    padding-block: 6px; /* місце для підсвітки, що виходить на 6 px */
+    scrollbar-width: thin;
+  }
+  .season__scroll:focus-visible { border-radius: 12px; }
+
+  .cal {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px repeat(12, minmax(0, 1fr));
+    column-gap: 4px;
+    min-width: 820px;
+    align-items: center;
+  }
+
+  .cal__now {
+    align-self: stretch;
+    margin: -6px 0;
+    border-radius: 12px;
+    background: var(--color-surface-300);
+    z-index: 0;
+  }
+
+  .cal__head-label {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    z-index: 1;
+  }
+  .cal__month {
+    z-index: 1;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-ink-muted);
+  }
+  .cal__month abbr { text-decoration: none; }
+  .cal__month.is-current {
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .cal__name {
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    padding-right: 12px;
+  }
+  .cal__name strong { font-size: 16px; line-height: 20px; font-weight: 700; }
+  .cal__name span { font-size: 12px; line-height: 16px; color: var(--color-ink-muted); }
+
+  .cal__track {
+    grid-column: 2 / 14;
+    height: 32px;
+    border-radius: 999px;
+    background: rgba(240, 243, 238, 0.7);
+    z-index: 1;
+  }
+  .cal__bar {
+    z-index: 2;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--color-season-other);
+    color: var(--color-ink);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .cal__bar span { overflow: hidden; text-overflow: ellipsis; }
+  .cal__bar.is-now {
+    background: var(--color-brand-strong);
+    color: #fff;
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 28px;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-line);
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--color-ink-muted);
+  }
+  .legend__item { display: inline-flex; align-items: center; gap: 10px; }
+  .legend__dot {
+    width: 28px; height: 12px;
+    border-radius: 999px;
+    background: var(--color-season-other);
+  }
+  .legend__dot--now { background: var(--color-brand-strong); }
+  .legend__note { margin-left: auto; }
+
+  @media (max-width: 640px) {
+    .season__card { padding: 20px 16px; }
+    .legend__note { margin-left: 0; }
+  }
+</style>
+
+<script>
+  // Підсвічуємо поточний місяць за датою на пристрої відвідувача.
+  const cal = document.querySelector<HTMLElement>('[data-season]');
+  if (cal) {
+    const month = new Date().getMonth();
+    if (String(month) !== cal.dataset.month) {
+      cal.dataset.month = String(month);
+      const now = cal.querySelector<HTMLElement>('[data-now]');
+      if (now) now.style.gridColumn = String(month + 2);
+      cal.querySelectorAll<HTMLElement>('[data-month-index]').forEach((el) => {
+        el.classList.toggle('is-current', Number(el.dataset.monthIndex) === month);
+      });
+      cal.querySelectorAll<HTMLElement>('[data-from]').forEach((bar) => {
+        const from = Number(bar.dataset.from);
+        const to = Number(bar.dataset.to);
+        bar.classList.toggle('is-now', month >= from && month <= to);
+      });
+    }
+  }
+</script>

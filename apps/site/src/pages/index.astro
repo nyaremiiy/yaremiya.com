@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Catalog from '../components/Catalog.astro';
+import About from '../components/About.astro';
+import Season from '../components/Season.astro';
+import Order from '../components/Order.astro';
+import Contacts from '../components/Contacts.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_URL, business, links } from '../config/site';
+
+const title = 'Саджанці, квіти й розсада від виробника — ЯРЕМІЯ, Мужиловичі (Львівщина)';
+const description =
+  'Сімейне господарство на Львівщині: декоративні кущі, лаванда, хризантеми, самшит, саджанці й розсада квітів та овочів. Вирощуємо самі — самовивіз, доставка поблизу й поштою.';
+
+// Розмітка для Google: хто ми, де, як зв'язатися й коли працюємо.
+// Дні тижня ще уточнюються — поки вказано щодня.
+const sameAs = [links.instagram, links.facebook].filter((l) => l.startsWith('http'));
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'GardenStore',
+  '@id': `${SITE_URL}/#business`,
+  name: business.name,
+  description,
+  url: `${SITE_URL}/`,
+  logo: `${SITE_URL}/logo/yaremiia-logo.svg`,
+  image: `${SITE_URL}/logo/yaremiia-logo.svg`,
+  telephone: business.phones.manager.tel,
+  email: business.email,
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Мужиловичі',
+    addressRegion: 'Львівська область',
+    addressCountry: 'UA',
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+      opens: '08:00',
+      closes: '24:00',
+    },
+  ],
+  contactPoint: [
+    { '@type': 'ContactPoint', telephone: business.phones.manager.tel, contactType: 'sales', availableLanguage: 'uk' },
+    { '@type': 'ContactPoint', telephone: business.phones.owner.tel, contactType: 'customer service', availableLanguage: 'uk' },
+  ],
+  ...(sameAs.length ? { sameAs } : {}),
+};
+---
+
+<BaseLayout title={title} description={description} jsonLd={jsonLd}>
+  <Header />
+  <main id="main">
+    <Hero />
+    <Catalog />
+    <About />
+    <Season />
+    <Order />
+    <Contacts />
+  </main>
+  <Footer />
+</BaseLayout>
+
+<script>
+  import { initFavorites } from '../scripts/favorites';
+  import { initCatalog } from '../scripts/catalog';
+  import { initForms } from '../scripts/forms';
+  initFavorites();
+  initCatalog();
+  initForms();
+</script>

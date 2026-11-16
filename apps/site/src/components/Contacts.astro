@@ -1,0 +1,191 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import Icon from './Icon.astro';
+import { business, links } from '../config/site';
+const { manager, owner } = business.phones;
+---
+
+<section id="contacts" class="section contacts" aria-labelledby="contacts-title">
+  <div class="container contacts__grid">
+    <div class="contacts__info">
+      <div class="contacts__intro">
+        <Eyebrow icon="map-pin">Контакти</Eyebrow>
+        <h2 id="contacts-title" class="h2">Приїжджайте в гості</h2>
+        <p class="lead">
+          Покажемо рослини наживо й допоможемо вибрати. Краще попередьте про приїзд — так ми точно будемо на місці.
+        </p>
+      </div>
+
+      <address class="clist">
+        <div class="citem">
+          <span class="icon-dot"><Icon name="map-pin" size={20} /></span>
+          <div>
+            <p class="citem__label">Адреса</p>
+            <p class="citem__value">{business.address}</p>
+          </div>
+        </div>
+        <div class="citem">
+          <span class="icon-dot"><Icon name="phone" size={20} /></span>
+          <div>
+            <p class="citem__label">Телефони</p>
+            <p class="citem__value">
+              <a href={`tel:${manager.tel}`}>{manager.display}</a> <small>— {manager.note}</small>
+            </p>
+            <p class="citem__value">
+              <a href={`tel:${owner.tel}`}>{owner.display}</a> <small>— {owner.note}</small>
+            </p>
+          </div>
+        </div>
+        <div class="citem">
+          <span class="icon-dot"><Icon name="clock" size={20} /></span>
+          <div>
+            <p class="citem__label">Графік</p>
+            <p class="citem__value">{business.hours}</p>
+          </div>
+        </div>
+        <div class="citem">
+          <span class="icon-dot"><Icon name="message-circle" size={20} /></span>
+          <div>
+            <p class="citem__label">Месенджери</p>
+            <p class="citem__value">
+              <a href={links.viber}>Viber</a> · <a href={links.telegram}>Telegram</a> · <a href={links.whatsapp}>WhatsApp</a>
+            </p>
+          </div>
+        </div>
+        <div class="citem">
+          <span class="icon-dot"><Icon name="mail" size={20} /></span>
+          <div>
+            <p class="citem__label">Ел. пошта</p>
+            <p class="citem__value citem__value--mail"><a href={`mailto:${business.email}`}>{business.email}</a></p>
+          </div>
+        </div>
+      </address>
+
+      <a class="btn btn--dark route-btn" href={links.route}>
+        <Icon name="navigation" size={20} />
+        Прокласти маршрут
+      </a>
+    </div>
+
+    <!-- Тут буде вбудована Google Карта (iframe). Поки — намальований плейсхолдер. -->
+    <div class="map" role="img" aria-label="Карта: тут буде Google Карта з розташуванням господарства в Мужиловичах">
+      <div class="map__pin">
+        <span class="map__marker"><Icon name="map-pin" size={26} /></span>
+        <span class="map__label">ЯРЕМІЯ — простір рослин</span>
+      </div>
+      <span class="map__note">[Тут буде Google Карта]</span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contacts__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: stretch;
+  }
+  .contacts__info {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: flex-start;
+  }
+  .contacts__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .clist {
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .citem {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .citem__label {
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-ink-muted);
+    margin-bottom: 2px;
+  }
+  .citem__value {
+    font-size: 17px;
+    line-height: 26px;
+    font-weight: 600;
+  }
+  .citem__value a { transition: color .2s; }
+  .citem__value a:hover { color: var(--color-brand-strong); text-decoration: underline; text-underline-offset: 3px; }
+  .citem__value a[href^='tel'] { white-space: nowrap; }
+  .citem__value small {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink-muted);
+  }
+  .citem__value--mail { overflow-wrap: anywhere; }
+
+  .route-btn { margin-top: 4px; }
+
+  .map {
+    position: relative;
+    min-height: 440px;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: var(--color-surface-300);
+    background-image:
+      linear-gradient(#d5ded0 1.5px, transparent 1.5px),
+      linear-gradient(90deg, #d5ded0 1.5px, transparent 1.5px),
+      linear-gradient(32deg, transparent 47%, #d5ded0 47%, #d5ded0 53%, transparent 53%);
+    background-size: 56px 56px, 56px 56px, 100% 100%;
+    display: grid;
+    place-items: center;
+  }
+  .map__pin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .map__marker {
+    display: grid;
+    place-items: center;
+    width: 56px; height: 56px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    background: var(--color-brand-strong);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(31, 46, 34, 0.25);
+  }
+  .map__marker :global(svg) { transform: rotate(45deg); }
+  .map__label {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: var(--shadow-card);
+    white-space: nowrap;
+  }
+  .map__note {
+    position: absolute;
+    left: 50%; bottom: 20px;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 960px) {
+    .contacts__grid { grid-template-columns: 1fr; }
+    .map { min-height: 340px; }
+  }
+</style>

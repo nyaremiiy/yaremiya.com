@@ -1,0 +1,180 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import { assetImage } from '../lib/images';
+import { categoryLabel, statuses, type Plant } from '../lib/data';
+import { routes } from '../config/site';
+
+interface Props {
+  plant: Plant;
+}
+const { plant } = Astro.props;
+const img = assetImage(plant.photo);
+const status = statuses[plant.status];
+const href = routes.plant(plant.slug);
+// Фото рослин бувають малими (250–550 px) — не збільшуємо їх більше оригіналу.
+const widths = [320, 480, 640].filter((w) => w <= img.width);
+if (!widths.length || widths[widths.length - 1] < img.width) widths.push(Math.min(img.width, 640));
+---
+
+<article class="plant card" data-category={plant.category} data-slug={plant.slug}>
+  <div class="plant__media">
+    <a href={href} tabindex="-1" aria-hidden="true">
+      <Picture
+        src={img}
+        formats={['avif', 'webp']}
+        widths={[...new Set(widths)]}
+        sizes="(max-width: 640px) calc(100vw - 32px), 320px"
+        alt={plant.name}
+        loading="lazy"
+        decoding="async"
+      />
+    </a>
+    <span class="plant__status" style={`background:${status.bg};color:${status.fg}`}>{status.text}</span>
+    <button
+      class="heart"
+      type="button"
+      aria-pressed="false"
+      aria-label="Додати у вподобані"
+      data-fav={plant.slug}
+      data-name={plant.name}
+    >
+      <Icon name="heart" size={20} />
+    </button>
+  </div>
+
+  <div class="plant__body">
+    <p class="plant__cat">{categoryLabel(plant.category)}</p>
+    <h3 class="plant__name"><a href={href}>{plant.name}</a></h3>
+    <p class="plant__detail">{plant.detail}</p>
+
+    <div class="plant__foot">
+      {plant.priceFrom != null ? (
+        <p class="price">
+          <span class="price__from">від</span>
+          <span class="price__sum">{plant.priceFrom} грн</span>
+          <span class="price__unit">/{plant.unit ?? 'шт'}</span>
+        </p>
+      ) : (
+        <p class="plant__noprice">{plant.priceText ?? 'Ціна навесні'}</p>
+      )}
+      <a class="plant__order" href="#order-form" data-order={plant.name}>
+        <Icon name="message-circle" size={18} />
+        Замовити
+      </a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .plant {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: box-shadow .25s, transform .25s;
+  }
+  .plant:hover { box-shadow: var(--shadow-raised); }
+
+  .plant[hidden] { display: none; }
+
+  .plant__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: var(--color-surface-300);
+  }
+  .plant__media :global(picture),
+  .plant__media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .plant__media :global(img) {
+    object-fit: cover;
+    transition: transform .4s;
+  }
+  .plant:hover .plant__media :global(img) { transform: scale(1.03); }
+  .plant__media > a { display: block; height: 100%; overflow: hidden; }
+
+  .plant__status {
+    position: absolute;
+    top: 14px; left: 14px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    max-width: calc(100% - 28px - 54px);
+  }
+
+  .heart {
+    position: absolute;
+    top: 14px; right: 14px;
+    display: grid;
+    place-items: center;
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--color-forest);
+    box-shadow: 0 1px 3px rgba(31, 46, 34, 0.12);
+    transition: transform .15s, color .2s;
+  }
+  .heart:hover { transform: scale(1.06); }
+  .heart[aria-pressed='true'] { color: var(--color-heart); }
+  .heart[aria-pressed='true'] :global(svg) { fill: var(--color-heart); }
+
+  .plant__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 20px 22px;
+  }
+  .plant__cat {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-brand-strong);
+  }
+  .plant__name {
+    font-size: 19px;
+    line-height: 26px;
+    font-weight: 700;
+  }
+  .plant__name a:hover { color: var(--color-brand-strong); }
+  .plant__detail {
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--color-ink-muted);
+  }
+
+  .plant__foot {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .plant__noprice {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-ink-muted);
+    white-space: nowrap;
+  }
+  .plant__order {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 12px;
+    background: var(--color-brand-strong);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: background-color .2s;
+  }
+  .plant__order:hover { background: #426431; }
+</style>

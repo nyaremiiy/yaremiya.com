@@ -1,0 +1,10 @@
+{
+  "name": "yaremiya",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --filter site dev",
+    "build": "pnpm --filter site build",
+    "preview": "pnpm --filter site preview"
+  },
+  "packageManager": "pnpm@11.4.0"
+}

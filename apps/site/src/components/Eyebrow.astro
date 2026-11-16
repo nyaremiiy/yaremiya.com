@@ -1,0 +1,38 @@
+---
+// Плашка-підпис над заголовком секції.
+import Icon, { type IconName } from './Icon.astro';
+
+interface Props {
+  icon: IconName;
+  dark?: boolean;
+}
+const { icon, dark = false } = Astro.props;
+---
+
+<p class:list={['eyebrow', { 'eyebrow--dark': dark }]}>
+  <Icon name={icon} size={16} />
+  <span><slot /></span>
+</p>
+
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    width: fit-content;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    background: var(--color-surface-300);
+    color: var(--color-brand-strong);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .eyebrow--dark {
+    background: rgba(156, 194, 122, 0.16);
+    color: var(--color-leaf);
+  }
+</style>

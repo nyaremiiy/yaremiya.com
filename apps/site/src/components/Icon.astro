@@ -1,0 +1,100 @@
+---
+// Іконки Lucide з товщиною лінії 1.75 (як у макеті).
+import MapPin from '@lucide/astro/icons/map-pin';
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import ArrowUp from '@lucide/astro/icons/arrow-up';
+import MessageCircle from '@lucide/astro/icons/message-circle';
+import Shrub from '@lucide/astro/icons/shrub';
+import Flower2 from '@lucide/astro/icons/flower-2';
+import Sprout from '@lucide/astro/icons/sprout';
+import TreeDeciduous from '@lucide/astro/icons/tree-deciduous';
+import LayoutGrid from '@lucide/astro/icons/layout-grid';
+import Heart from '@lucide/astro/icons/heart';
+import ShoppingBag from '@lucide/astro/icons/shopping-bag';
+import Phone from '@lucide/astro/icons/phone';
+import HeartHandshake from '@lucide/astro/icons/heart-handshake';
+import Users from '@lucide/astro/icons/users';
+import House from '@lucide/astro/icons/house';
+import CalendarDays from '@lucide/astro/icons/calendar-days';
+import ShoppingBasket from '@lucide/astro/icons/shopping-basket';
+import Truck from '@lucide/astro/icons/truck';
+import Package from '@lucide/astro/icons/package';
+import Send from '@lucide/astro/icons/send';
+import Clock from '@lucide/astro/icons/clock';
+import Mail from '@lucide/astro/icons/mail';
+import Navigation from '@lucide/astro/icons/navigation';
+import Leaf from '@lucide/astro/icons/leaf';
+import Menu from '@lucide/astro/icons/menu';
+import X from '@lucide/astro/icons/x';
+import CircleCheck from '@lucide/astro/icons/circle-check';
+
+const lucide = {
+  'map-pin': MapPin,
+  'arrow-right': ArrowRight,
+  'arrow-up': ArrowUp,
+  'message-circle': MessageCircle,
+  shrub: Shrub,
+  'flower-2': Flower2,
+  sprout: Sprout,
+  'tree-deciduous': TreeDeciduous,
+  'layout-grid': LayoutGrid,
+  heart: Heart,
+  'shopping-bag': ShoppingBag,
+  phone: Phone,
+  'heart-handshake': HeartHandshake,
+  users: Users,
+  house: House,
+  'calendar-days': CalendarDays,
+  'shopping-basket': ShoppingBasket,
+  truck: Truck,
+  package: Package,
+  send: Send,
+  clock: Clock,
+  mail: Mail,
+  navigation: Navigation,
+  leaf: Leaf,
+  menu: Menu,
+  x: X,
+  'circle-check': CircleCheck,
+};
+
+export type IconName = keyof typeof lucide | 'instagram' | 'facebook';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+const Cmp = name in lucide ? lucide[name as keyof typeof lucide] : null;
+---
+
+{Cmp ? (
+  <Cmp size={size} stroke-width={1.75} class={className} aria-hidden="true" focusable="false" />
+) : (
+  // Instagram і Facebook прибрали з нових версій Lucide — це їхні оригінальні контури з Lucide 0.x.
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class={className}
+    aria-hidden="true"
+    focusable="false"
+  >
+    {name === 'instagram' && (
+      <>
+        <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+        <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+      </>
+    )}
+    {name === 'facebook' && <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />}
+  </svg>
+)}

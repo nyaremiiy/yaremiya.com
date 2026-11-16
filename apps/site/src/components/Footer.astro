@@ -1,0 +1,319 @@
+---
+import Icon, { type IconName } from './Icon.astro';
+import { business, endpoints, links, routes } from '../config/site';
+
+const year = new Date().getFullYear();
+const { manager, owner } = business.phones;
+
+const socials: { label: string; icon: IconName; href: string }[] = [
+  { label: 'Instagram', icon: 'instagram', href: links.instagram },
+  { label: 'Facebook', icon: 'facebook', href: links.facebook },
+  { label: 'Viber', icon: 'message-circle', href: links.viber },
+  { label: 'Telegram', icon: 'send', href: links.telegram },
+];
+
+const columns = [
+  {
+    title: 'Каталог',
+    links: [
+      { label: 'Декоративні кущі', href: routes.catalogCategory('shrubs'), filter: 'shrubs' },
+      { label: 'Квіти', href: routes.catalogCategory('flowers'), filter: 'flowers' },
+      { label: 'Саджанці', href: routes.catalogCategory('saplings'), filter: 'saplings' },
+      { label: 'Розсада квітів', href: routes.catalogCategory('seedlings'), filter: 'seedlings' },
+      { label: 'Розсада овочів', href: routes.catalogCategory('seedlings'), filter: 'seedlings' },
+      { label: 'Усі рослини', href: routes.catalogCategory('all'), filter: 'all' },
+    ],
+  },
+  {
+    title: 'Покупцям',
+    links: [
+      { label: 'Як замовити', href: '#order' },
+      { label: 'Доставка й оплата', href: routes.delivery },
+      { label: 'Сезонний календар', href: '#season' },
+      { label: 'Догляд за рослинами', href: routes.care },
+      { label: 'Вподобані', href: routes.favorites },
+      { label: 'Кошик', href: routes.cart },
+    ],
+  },
+  {
+    title: 'Господарство',
+    links: [
+      { label: 'Про нас', href: '#about' },
+      { label: 'Контакти', href: '#contacts' },
+      { label: 'Як доїхати', href: '#contacts' },
+      { label: 'Залишити заявку', href: '#order-form' },
+    ],
+  },
+];
+---
+
+<footer class="footer on-dark">
+  <div class="container">
+    <div class="subscribe">
+      <div class="subscribe__text">
+        <span class="subscribe__icon"><Icon name="leaf" size={24} /></span>
+        <div>
+          <h2 class="subscribe__title">Новини сезону</h2>
+          <p>
+            Напишемо, коли з’явиться розсада, зацвітуть хризантеми чи будуть нові сорти. Без спаму — кілька листів
+            за сезон.
+          </p>
+        </div>
+      </div>
+      <div class="subscribe__side">
+        <form class="subscribe__form" data-form="subscribe" data-endpoint={endpoints.subscribe} novalidate>
+          <label class="visually-hidden" for="sub-email">Ваш e-mail</label>
+          <input id="sub-email" name="email" type="email" autocomplete="email" placeholder="Ваш e-mail" required aria-describedby="sub-email-err" />
+          <button class="btn btn--leaf" type="submit">
+            <Icon name="send" size={18} />
+            Підписатися
+          </button>
+        </form>
+        <p class="subscribe__err" id="sub-email-err" data-err-for="email"></p>
+        <p class="subscribe__thanks" data-thanks="subscribe" role="status" hidden>
+          <Icon name="circle-check" size={20} />
+          Дякуємо! Напишемо, щойно буде новина сезону.
+        </p>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="brand">
+        <a href={routes.home} aria-label="ЯРЕМІЯ — простір рослин, на головну">
+          <img src="/logo/yaremiia-logo-horizontal-on-dark.svg" alt="ЯРЕМІЯ — простір рослин" height="52" width="226" loading="lazy" />
+        </a>
+        <p>
+          Сімейне господарство на Львівщині. Самі вирощуємо декоративні кущі, квіти, саджанці й розсаду — і з
+          радістю підкажемо, що приживеться саме у вашому саду.
+        </p>
+        <ul class="socials">
+          {socials.map((s) => (
+            <li>
+              <a href={s.href} aria-label={s.label}><Icon name={s.icon} size={20} /></a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {columns.map((col) => (
+        <nav class="col" aria-label={col.title}>
+          <h2 class="col__title">{col.title}</h2>
+          <ul>
+            {col.links.map((l) => (
+              <li><a href={l.href} data-filter-link={'filter' in l ? l.filter : undefined}>{l.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+      ))}
+
+      <div class="col">
+        <h2 class="col__title">Контакти</h2>
+        <ul class="fcontacts">
+          <li>
+            <Icon name="phone" size={18} />
+            <span>
+              <a href={`tel:${manager.tel}`}>{manager.display}</a> <small>менеджер</small><br />
+              <a href={`tel:${owner.tel}`}>{owner.display}</a> <small>власник</small>
+            </span>
+          </li>
+          <li>
+            <Icon name="mail" size={18} />
+            <a class="mail" href={`mailto:${business.email}`}>{business.email.split('@')[0]}<wbr />@{business.email.split('@')[1]}</a>
+          </li>
+          <li>
+            <Icon name="map-pin" size={18} />
+            <span>{business.addressShort} · <span class="nowrap">{business.hoursShort}</span></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <p>© {year} {business.name}. Усі права захищено.</p>
+      <ul class="bottom__links">
+        <li><a href={routes.privacy}>Політика конфіденційності</a></li>
+        <li><a href={routes.terms}>Умови замовлення й повернення</a></li>
+        <li>
+          <a href="#top" class="totop">Нагору <Icon name="arrow-up" size={16} /></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <p class="bigword" aria-hidden="true">ЯРЕМІЯ</p>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-footer);
+    color: var(--color-ink-on-dark);
+    padding-top: 72px;
+    font-size: 15px;
+    line-height: 24px;
+  }
+  .footer a { transition: color .2s; }
+  .footer a:hover { color: var(--color-ink-on-forest); }
+
+  .subscribe {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding: 36px 40px;
+    border-radius: 24px;
+    background: var(--color-forest);
+    box-shadow: inset 0 0 0 1px rgba(240, 243, 238, 0.08);
+  }
+  .subscribe__text {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    max-width: 620px;
+  }
+  .subscribe__icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(156, 194, 122, 0.16);
+    color: var(--color-leaf);
+  }
+  .subscribe__title {
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
+    color: var(--color-ink-on-forest);
+    margin-bottom: 6px;
+  }
+  .subscribe__side { flex: 1 1 420px; max-width: 520px; }
+  .subscribe__form {
+    display: flex;
+    gap: 10px;
+  }
+  .subscribe__form input {
+    flex: 1;
+    min-width: 0;
+    height: 54px;
+    padding: 0 22px;
+    border-radius: 999px;
+    border: 0;
+    background: var(--color-surface-100);
+    color: var(--color-ink);
+    font-size: 16px;
+  }
+  .subscribe__form input::placeholder { color: #6b7768; }
+  .subscribe__form input[aria-invalid='true'] { box-shadow: inset 0 0 0 2px #f2b8b5; }
+  .subscribe__form .btn { height: 54px; padding: 0 24px; }
+  .subscribe__err { margin-top: 8px; padding-left: 22px; font-size: 13px; color: #f2b8b5; }
+  .subscribe__err:empty { display: none; }
+  .subscribe__thanks {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    font-weight: 600;
+    color: var(--color-ink-on-forest);
+  }
+  .subscribe__thanks[hidden] { display: none; }
+  .subscribe__thanks :global(svg) { color: var(--color-leaf); flex: none; }
+
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(240px, 1.4fr) repeat(3, minmax(140px, 1fr)) minmax(270px, 1.5fr);
+    gap: 40px 36px;
+    padding-block: 56px;
+  }
+  .brand {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .brand img { height: 52px; width: auto; }
+  .brand p { max-width: 340px; }
+
+  .socials { display: flex; gap: 10px; }
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: rgba(240, 243, 238, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(240, 243, 238, 0.14);
+    color: var(--color-ink-on-forest);
+    transition: background-color .2s;
+  }
+  .socials a:hover { background: rgba(156, 194, 122, 0.2); }
+
+  .col__title {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-leaf);
+    margin-bottom: 18px;
+  }
+  .col ul { display: flex; flex-direction: column; gap: 10px; }
+
+  .fcontacts li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .fcontacts :global(svg) { color: var(--color-leaf); flex: none; margin-top: 3px; }
+  .fcontacts a[href^='tel'] { white-space: nowrap; color: var(--color-ink-on-forest); font-weight: 600; }
+  .nowrap { white-space: nowrap; }
+  .fcontacts small { font-size: 13px; opacity: .85; }
+  .fcontacts .mail { overflow-wrap: break-word; min-width: 0; }
+
+  .bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 28px;
+    padding-block: 24px;
+    border-top: 1px solid rgba(240, 243, 238, 0.12);
+    font-size: 13px;
+    line-height: 20px;
+  }
+  .bottom__links { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+  .totop { display: inline-flex; align-items: center; gap: 6px; }
+
+  .bigword {
+    margin: 8px 0 0;
+    text-align: center;
+    font-size: clamp(80px, 15vw, 220px);
+    line-height: 0.78;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: rgba(240, 243, 238, 0.05);
+    white-space: nowrap;
+    user-select: none;
+    pointer-events: none;
+    /* обрізане знизу */
+    height: 0.62em;
+    overflow: hidden;
+  }
+
+  @media (max-width: 1180px) {
+    .cols { grid-template-columns: repeat(3, 1fr); }
+    .brand { grid-column: 1 / -1; }
+    .brand p { max-width: 560px; }
+  }
+  @media (max-width: 720px) {
+    .footer { padding-top: 48px; }
+    .subscribe { padding: 28px 20px; }
+    .subscribe__side { flex-basis: 100%; }
+    .cols { grid-template-columns: 1fr 1fr; padding-block: 44px; }
+    .cols > :last-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 480px) {
+    .subscribe__form { flex-direction: column; }
+    .subscribe__form .btn { width: 100%; }
+    .subscribe__text { flex-direction: column; gap: 14px; }
+  }
+</style>
