@@ -107,7 +107,7 @@ const chips: { label: string; icon: IconName; filter: string }[] = [
     justify-content: center;
     gap: 26px;
     width: 100%;
-    max-width: calc(960px + 64px); /* 960 px — сам текст, 32 px відступи з боків поза ним */
+    max-width: 1080px;
     margin: 0 auto;
     /* зверху — місце під шапку (~88 px), яка лежить поверх фото */
     padding: calc(88px + 96px) 32px 72px;
@@ -133,11 +133,12 @@ const chips: { label: string; icon: IconName; filter: string }[] = [
   }
 
   .hero__title {
-    font-size: clamp(42px, 5.6vw, 76px);
-    line-height: 1.04;
+    font-size: clamp(34px, 4.2vw, 60px);
+    line-height: 1.08;
     font-weight: 700;
     letter-spacing: -0.015em;
     color: var(--color-ink-on-forest);
+    text-wrap: balance;
   }
 
   .hero__text {
@@ -193,7 +194,7 @@ const chips: { label: string; icon: IconName; filter: string }[] = [
     .hero { min-height: 0; }
     .hero__media { inset: 8px; border-radius: 22px; }
     .hero__content { padding: calc(64px + 44px) 20px 48px; }
-    .hero__title { font-size: 38px; }
+    .hero__title { font-size: 32px; }
     .hero__badge { letter-spacing: 0.12em; font-size: 11px; }
     .hero__buttons { flex-direction: column; align-self: stretch; }
     .hero__buttons .btn { width: 100%; }
