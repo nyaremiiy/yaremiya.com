@@ -1,0 +1,25 @@
+{
+  "_note": "Демо-дані для головної сторінки. Ціни орієнтовні ринкові — власник замінить своїми. Фото тестові, з інтернету — замінити власними.",
+  "categories": [
+    { "id": "all", "label": "Усі" },
+    { "id": "shrubs", "label": "Декоративні кущі" },
+    { "id": "flowers", "label": "Квіти" },
+    { "id": "seedlings", "label": "Розсада" },
+    { "id": "saplings", "label": "Саджанці" }
+  ],
+  "statuses": {
+    "in":  { "text": "В наявності", "bg": "#E6F0DE", "fg": "#3F6130" },
+    "low": { "text": "Мало", "bg": "#F7EBD6", "fg": "#7A4F0E" },
+    "pre": { "text": "Передзамовлення на весну", "bg": "#ECEFEA", "fg": "#3E4C3B" }
+  },
+  "plants": [
+    { "slug": "lavanda-vuzkolysta", "category": "shrubs", "name": "Лаванда вузьколиста", "detail": "Горщик 0,5 л, висота 10–15 см. Витримує морози до −30 °C", "priceFrom": 90, "unit": null, "status": "in", "photo": "/images/plants/lavender-bush.jpg" },
+    { "slug": "khryzantema-kushchova", "category": "flowers", "name": "Хризантема кущова", "detail": "Низькоросла, горщик 2 л. Цвіте до перших морозів", "priceFrom": 100, "unit": null, "status": "in", "photo": "/images/plants/chrysanthemum-bush.jpg" },
+    { "slug": "samshyt-vichnozelenyi", "category": "shrubs", "name": "Самшит вічнозелений", "detail": "Горщик 0,5 л, висота 15–20 см. Для бордюрів і фігурної стрижки", "priceFrom": 60, "unit": null, "status": "in", "photo": "/images/plants/boxwood-ball.jpg" },
+    { "slug": "khryzantema-kuliasta", "category": "flowers", "name": "Хризантема куляста", "detail": "Мультифлора — сама формує кулю 30–60 см, вкриту дрібними квітами", "priceFrom": 150, "unit": null, "status": "low", "photo": "/images/plants/chrysanthemum-multiflora.jpg" },
+    { "slug": "samshyt-dlia-zhyvoplotu", "category": "saplings", "name": "Самшит для живоплоту", "detail": "Молоді саджанці 15–20 см — гуртом дешевше", "priceFrom": 55, "unit": "шт", "status": "in", "photo": "/images/plants/boxwood-hedge.jpg" },
+    { "slug": "lavanda-sadzhantsi", "category": "saplings", "name": "Лаванда — саджанці", "detail": "Для бордюрів, клумб і лавандових доріжок", "priceFrom": 55, "unit": null, "status": "low", "photo": "/images/plants/lavender-sapling.jpg" },
+    { "slug": "petuniia-ampelna", "category": "seedlings", "name": "Петунія ампельна", "detail": "Для підвісних кашпо й балконів — пагони звісають до 80 см", "priceFrom": null, "priceText": "Ціна навесні", "unit": null, "status": "pre", "photo": "/images/plants/petunia-cascade.jpg" },
+    { "slug": "petuniia-krupnokvitkova", "category": "seedlings", "name": "Петунія крупноквіткова", "detail": "Великі яскраві квіти для клумб і вазонів", "priceFrom": null, "priceText": "Ціна навесні", "unit": null, "status": "pre", "photo": "/images/plants/petunia-grandiflora.jpg" }
+  ]
+}
