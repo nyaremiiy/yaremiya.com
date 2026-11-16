@@ -23,13 +23,26 @@ export const business = {
 };
 
 // Посилання, яких ще немає, — поки '#'.
+// Координати господарства (Мужиловичі) — для карти, маршруту й розмітки для Google.
+export const geo = {
+  lat: 49.86421706187098,
+  lng: 23.50298820496087,
+};
+
+export const map = {
+  // Вбудована Google Карта (iframe) у секції «Контакти»
+  embed: `https://www.google.com/maps?q=${geo.lat},${geo.lng}&z=15&hl=uk&output=embed`,
+  // «Прокласти маршрут» / «Як доїхати» — відкривається в новій вкладці
+  route: `https://www.google.com/maps/dir/?api=1&destination=${geo.lat},${geo.lng}`,
+};
+
 export const links = {
   viber: '#',
   telegram: '#',
   whatsapp: '#',
   instagram: '#',
   facebook: '#',
-  route: '#', // «Прокласти маршрут» — посилання на Google Карти
+  route: map.route, // «Прокласти маршрут» і «Як доїхати»
 };
 
 // Адреси сторінок. Поки інших сторінок немає — ведуть на секції головної або '#'.

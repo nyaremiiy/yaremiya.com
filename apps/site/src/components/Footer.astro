@@ -40,7 +40,7 @@ const columns = [
     links: [
       { label: 'Про нас', href: '#about' },
       { label: 'Контакти', href: '#contacts' },
-      { label: 'Як доїхати', href: '#contacts' },
+      { label: 'Як доїхати', href: links.route, external: true },
       { label: 'Залишити заявку', href: '#order-form' },
     ],
   },
@@ -100,7 +100,15 @@ const columns = [
           <h2 class="col__title">{col.title}</h2>
           <ul>
             {col.links.map((l) => (
-              <li><a href={l.href} data-filter-link={'filter' in l ? l.filter : undefined}>{l.label}</a></li>
+              <li>
+                {'external' in l && l.external ? (
+                  <a href={l.href} target="_blank" rel="noopener">
+                    {l.label}<span class="visually-hidden"> (відкриється в новій вкладці)</span>
+                  </a>
+                ) : (
+                  <a href={l.href} data-filter-link={'filter' in l ? l.filter : undefined}>{l.label}</a>
+                )}
+              </li>
             ))}
           </ul>
         </nav>

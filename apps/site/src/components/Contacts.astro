@@ -1,7 +1,7 @@
 ---
 import Eyebrow from './Eyebrow.astro';
 import Icon from './Icon.astro';
-import { business, links } from '../config/site';
+import { business, links, map } from '../config/site';
 const { manager, owner } = business.phones;
 ---
 
@@ -61,19 +61,21 @@ const { manager, owner } = business.phones;
         </div>
       </address>
 
-      <a class="btn btn--dark route-btn" href={links.route}>
+      <a class="btn btn--dark route-btn" href={links.route} target="_blank" rel="noopener">
         <Icon name="navigation" size={20} />
         Прокласти маршрут
+        <span class="visually-hidden"> (відкриється в новій вкладці)</span>
       </a>
     </div>
 
-    <!-- Тут буде вбудована Google Карта (iframe). Поки — намальований плейсхолдер. -->
-    <div class="map" role="img" aria-label="Карта: тут буде Google Карта з розташуванням господарства в Мужиловичах">
-      <div class="map__pin">
-        <span class="map__marker"><Icon name="map-pin" size={26} /></span>
-        <span class="map__label">ЯРЕМІЯ — простір рослин</span>
-      </div>
-      <span class="map__note">[Тут буде Google Карта]</span>
+    <div class="map">
+      <iframe
+        src={map.embed}
+        title="ЯРЕМІЯ на карті"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        allowfullscreen
+      ></iframe>
     </div>
   </div>
 </section>
@@ -139,53 +141,18 @@ const { manager, owner } = business.phones;
     min-height: 440px;
     border-radius: 20px;
     overflow: hidden;
-    background-color: var(--color-surface-300);
-    background-image:
-      linear-gradient(#d5ded0 1.5px, transparent 1.5px),
-      linear-gradient(90deg, #d5ded0 1.5px, transparent 1.5px),
-      linear-gradient(32deg, transparent 47%, #d5ded0 47%, #d5ded0 53%, transparent 53%);
-    background-size: 56px 56px, 56px 56px, 100% 100%;
-    display: grid;
-    place-items: center;
+    background: var(--color-surface-300); /* видно, поки карта вантажиться */
   }
-  .map__pin {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-  .map__marker {
-    display: grid;
-    place-items: center;
-    width: 56px; height: 56px;
-    border-radius: 50% 50% 50% 0;
-    transform: rotate(-45deg);
-    background: var(--color-brand-strong);
-    color: #fff;
-    box-shadow: 0 8px 20px rgba(31, 46, 34, 0.25);
-  }
-  .map__marker :global(svg) { transform: rotate(45deg); }
-  .map__label {
-    padding: 8px 14px;
-    border-radius: 999px;
-    background: #fff;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: var(--shadow-card);
-    white-space: nowrap;
-  }
-  .map__note {
+  .map iframe {
     position: absolute;
-    left: 50%; bottom: 20px;
-    transform: translateX(-50%);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-ink-muted);
-    white-space: nowrap;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
   }
 
   @media (max-width: 960px) {
     .contacts__grid { grid-template-columns: 1fr; }
-    .map { min-height: 340px; }
   }
 </style>
