@@ -1,0 +1,59 @@
+---
+import '@fontsource/montserrat/cyrillic-400.css';
+import '@fontsource/montserrat/cyrillic-500.css';
+import '@fontsource/montserrat/cyrillic-600.css';
+import '@fontsource/montserrat/cyrillic-700.css';
+import '@fontsource/montserrat/latin-400.css';
+import '@fontsource/montserrat/latin-500.css';
+import '@fontsource/montserrat/latin-600.css';
+import '@fontsource/montserrat/latin-700.css';
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import { tokensToCss } from '../lib/tokens';
+import { assetImage } from '../lib/images';
+import { SITE_URL, business } from '../config/site';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string; // шлях у src/assets, напр. "/images/hero-greenhouse.jpg"
+  jsonLd?: Record<string, unknown>;
+}
+
+const { title, description, ogImage = '/images/hero-greenhouse.jpg', jsonLd } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE_URL).href;
+const og = await getImage({ src: assetImage(ogImage), width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogUrl = new URL(og.src, SITE_URL).href;
+---
+
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#1F2E22" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <style is:inline set:html={tokensToCss()}></style>
+    {jsonLd && <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти до вмісту</a>
+    <slot />
+  </body>
+</html>

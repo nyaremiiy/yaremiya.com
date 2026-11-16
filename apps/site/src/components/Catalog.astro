@@ -1,0 +1,111 @@
+---
+import Eyebrow from './Eyebrow.astro';
+import Icon from './Icon.astro';
+import PlantCard from './PlantCard.astro';
+import { categories, plants } from '../lib/data';
+import { routes } from '../config/site';
+---
+
+<section id="catalog" class="section catalog" aria-labelledby="catalog-title">
+  <div class="container">
+    <div class="catalog__top">
+      <div class="catalog__intro">
+        <Eyebrow icon="sprout">Каталог</Eyebrow>
+        <h2 id="catalog-title" class="h2">Зараз у нас ростуть</h2>
+        <p class="lead">
+          Оберіть рослину й напишіть нам — підкажемо, як її посадити й доглянути, щоб вона радувала вас роками.
+        </p>
+      </div>
+      <div class="filters" role="group" aria-label="Фільтр за категорією">
+        {categories.map((c) => (
+          <button class="filter" type="button" data-filter={c.id} aria-pressed={c.id === 'all' ? 'true' : 'false'}>
+            {c.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="catalog__grid" data-catalog-grid>
+      {plants.map((p) => <PlantCard plant={p} />)}
+    </div>
+    <p class="catalog__empty" data-catalog-empty hidden>У цій категорії поки нічого немає — напишіть нам, підкажемо.</p>
+    <p class="visually-hidden" aria-live="polite" data-catalog-status></p>
+
+    <div class="catalog__more">
+      <a class="btn btn--dark" href={routes.catalog}>
+        Увесь каталог
+        <Icon name="arrow-right" size={20} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .catalog__top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+  .catalog__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 640px;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .filter {
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--color-border);
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color .2s, color .2s, box-shadow .2s;
+  }
+  .filter:hover { box-shadow: inset 0 0 0 1px var(--color-brand-strong); }
+  .filter[aria-pressed='true'] {
+    background: var(--color-forest);
+    color: var(--color-ink-on-forest);
+    box-shadow: none;
+  }
+
+  .catalog__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+  .catalog__empty {
+    padding: 32px 0;
+    text-align: center;
+    color: var(--color-ink-muted);
+  }
+  .catalog__more {
+    display: flex;
+    justify-content: center;
+    margin-top: 48px;
+  }
+
+  @media (max-width: 640px) {
+    .catalog__grid { gap: 16px; grid-template-columns: 1fr; }
+    .catalog__top { margin-bottom: 28px; }
+    .filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      margin-inline: calc(var(--gutter) * -1);
+      padding: 2px var(--gutter);
+      scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+  }
+</style>

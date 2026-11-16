@@ -1,0 +1,202 @@
+---
+import { Picture } from 'astro:assets';
+import Icon, { type IconName } from './Icon.astro';
+import heroImg from '../assets/images/hero-greenhouse.jpg';
+import { routes } from '../config/site';
+
+const chips: { label: string; icon: IconName; filter: string }[] = [
+  { label: 'Декоративні кущі', icon: 'shrub', filter: 'shrubs' },
+  { label: 'Квіти', icon: 'flower-2', filter: 'flowers' },
+  { label: 'Розсада', icon: 'sprout', filter: 'seedlings' },
+  { label: 'Саджанці', icon: 'tree-deciduous', filter: 'saplings' },
+  { label: 'Усі рослини', icon: 'layout-grid', filter: 'all' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero__media">
+    <Picture
+      src={heroImg}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1440, 1920, 2400]}
+      sizes="calc(100vw - 32px)"
+      alt="Теплиця з розсадою на дерев'яних стелажах"
+      loading="eager"
+      fetchpriority="high"
+      class="hero__img"
+    />
+    <div class="hero__shade"></div>
+  </div>
+
+  <div class="hero__content">
+    <p class="hero__badge">
+      <Icon name="map-pin" size={16} />
+      <span>Сімейне господарство · Мужиловичі, Львівщина</span>
+    </p>
+    <h1 id="hero-title" class="hero__title">Саджанці, квіти та розсада від сімейного господарства</h1>
+    <p class="hero__text">
+      Вирощуємо декоративні кущі, квіти й розсаду для саду, клумби та балкона. Кожну рослину ми дбайливо
+      виплекали власними руками — тут, у Мужиловичах на Львівщині.
+    </p>
+    <div class="hero__buttons">
+      <a class="btn btn--leaf" href={routes.catalog}>
+        Переглянути каталог
+        <Icon name="arrow-right" size={20} />
+      </a>
+      <a class="btn btn--glass on-dark" href="#order">
+        <Icon name="message-circle" size={20} />
+        Як замовити
+      </a>
+    </div>
+    <ul class="hero__chips" aria-label="Категорії рослин">
+      {chips.map((c) => (
+        <li>
+          <a class="hero-chip on-dark" href={routes.catalogCategory(c.filter)} data-filter-link={c.filter}>
+            <Icon name={c.icon} size={18} />
+            {c.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 860px;
+    display: flex;
+    flex-direction: column;
+    color: var(--color-ink-on-forest);
+    isolation: isolate;
+  }
+  .hero__media {
+    position: absolute;
+    inset: 16px;
+    border-radius: 28px;
+    overflow: hidden;
+    z-index: -1;
+    background: var(--color-forest);
+  }
+  .hero__media :global(picture),
+  .hero__media :global(img) {
+    width: 100%;
+    height: 100%;
+  }
+  .hero__media :global(img) {
+    object-fit: cover;
+    object-position: center 60%;
+  }
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(20, 28, 22, 0.78) 0%,
+      rgba(20, 28, 22, 0.62) 35%,
+      rgba(20, 28, 22, 0.58) 65%,
+      rgba(20, 28, 22, 0.8) 100%
+    );
+  }
+
+  .hero__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 26px;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    /* зверху — місце під шапку (~88 px), яка лежить поверх фото */
+    padding: calc(88px + 96px) 32px 72px;
+    text-align: center;
+  }
+
+  .hero__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px 6px 10px;
+    border-radius: 999px;
+    background: rgba(20, 28, 22, 0.35);
+    box-shadow: inset 0 0 0 1px rgba(156, 194, 122, 0.3);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--color-leaf);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .hero__title {
+    font-size: clamp(42px, 5.6vw, 76px);
+    line-height: 1.04;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--color-ink-on-forest);
+  }
+
+  .hero__text {
+    max-width: 640px;
+    font-size: 19px;
+    line-height: 31px;
+    color: var(--color-ink-on-dark);
+  }
+
+  .hero__buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+  }
+
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 14px; /* разом із gap 26 = 40 px */
+  }
+  .hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 18px 0 14px;
+    border-radius: 999px;
+    background: rgba(240, 243, 238, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(240, 243, 238, 0.2);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    color: var(--color-ink-on-forest);
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition: background-color .2s;
+  }
+  .hero-chip:hover { background: rgba(240, 243, 238, 0.2); }
+  .hero-chip :global(svg) { color: var(--color-leaf); }
+
+  @media (min-width: 860px) and (max-width: 1023px) {
+    .hero__content { padding-top: calc(140px + 72px); }
+  }
+  @media (max-width: 859px) {
+    .hero { min-height: 760px; }
+    .hero__content { padding: calc(72px + 72px) 24px 56px; gap: 22px; }
+    .hero__text { font-size: 17px; line-height: 28px; }
+  }
+  @media (max-width: 480px) {
+    .hero { min-height: 0; }
+    .hero__media { inset: 8px; border-radius: 22px; }
+    .hero__content { padding: calc(64px + 44px) 20px 48px; }
+    .hero__title { font-size: 38px; }
+    .hero__badge { letter-spacing: 0.12em; font-size: 11px; }
+    .hero__buttons { flex-direction: column; align-self: stretch; }
+    .hero__buttons .btn { width: 100%; }
+    .hero-chip { height: 40px; font-size: 13px; padding: 0 14px 0 12px; }
+  }
+</style>

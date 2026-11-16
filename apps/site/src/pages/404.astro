@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="Сторінку не знайдено — ЯРЕМІЯ" description="Такої сторінки немає. Поверніться на головну сайту ЯРЕМІЯ — простір рослин.">
+  <main id="main" class="nf">
+    <a href="/"><img src="/logo/yaremiia-logo-horizontal.svg" alt="ЯРЕМІЯ — простір рослин" height="52" width="226" /></a>
+    <h1 class="h2">Такої сторінки немає</h1>
+    <p class="lead">Можливо, вона ще росте. Поверніться на головну — там усе найцікавіше.</p>
+    <a class="btn btn--primary" href="/">На головну <Icon name="arrow-right" size={20} /></a>
+  </main>
+</BaseLayout>
+
+<style>
+  .nf {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 48px 16px;
+    text-align: center;
+  }
+  .nf img { height: 52px; width: auto; margin-bottom: 16px; }
+  .nf .lead { margin-inline: auto; }
+</style>

@@ -1,0 +1,119 @@
+---
+import { Picture } from 'astro:assets';
+import Eyebrow from './Eyebrow.astro';
+import Icon, { type IconName } from './Icon.astro';
+import aboutImg from '../assets/images/about-greenhouse.jpg';
+
+const facts: { icon: IconName; title: string; text: string }[] = [
+  { icon: 'sprout', title: 'Другий сезон', text: 'вирощуємо рослини для ваших садів' },
+  { icon: 'users', title: 'Уся родина', text: 'працює в господарстві разом' },
+  { icon: 'house', title: '100% власне', text: 'виростили самі, без перепродажу' },
+];
+---
+
+<section id="about" class="section about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <figure class="about__photo">
+      <Picture
+        src={aboutImg}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1200]}
+        sizes="(max-width: 960px) calc(100vw - 32px), 640px"
+        alt="У теплиці: переносимо молоді рослини до саду"
+        loading="lazy"
+        decoding="async"
+      />
+    </figure>
+
+    <div class="about__text">
+      <Eyebrow icon="heart-handshake">Про нас</Eyebrow>
+      <h2 id="about-title" class="h2">Родинна справа, що росте разом із нами</h2>
+      <p class="lead">
+        Усе почалося з любові до землі й бажання ділитися красою, яку виростили власними руками. Тепер у
+        господарстві працює вся наша родина: хтось сіє й пересаджує, хтось доглядає теплиці, а хтось допомагає
+        підібрати рослини саме для вашого саду.
+      </p>
+      <p class="lead">
+        Для нас важливо, щоб кожна рослина приїхала до вас здоровою, загартованою й готовою радувати не один
+        сезон. Ми не перепродуємо — тільки те, що виросло в нашому господарстві.
+      </p>
+
+      <ul class="facts">
+        {facts.map((f) => (
+          <li class="fact">
+            <span class="icon-dot"><Icon name={f.icon} size={22} /></span>
+            <strong class="fact__title">{f.title}</strong>
+            <span class="fact__text">{f.text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about { background: #fff; }
+  .about__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .about__photo {
+    aspect-ratio: 5 / 4;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--color-surface-300);
+  }
+  .about__photo :global(picture),
+  .about__photo :global(img) { width: 100%; height: 100%; }
+  .about__photo :global(img) { object-fit: cover; }
+
+  .about__text {
+    container: about / inline-size;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 6px;
+    padding-top: 28px;
+    border-top: 1px solid var(--color-line);
+  }
+  .fact {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .fact + .fact {
+    padding-left: 24px;
+    border-left: 1px solid var(--color-line);
+  }
+  .fact .icon-dot { margin-bottom: 8px; }
+  .fact__title {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .fact__text {
+    font-size: 14px;
+    line-height: 21px;
+    color: var(--color-ink-muted);
+  }
+
+  @media (max-width: 960px) {
+    .about__grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  /* Коли колонка вузька — факти стають списком, щоб заголовки не переносились */
+  @container about (max-width: 599px) {
+    .facts { grid-template-columns: 1fr; gap: 20px; }
+    .fact { display: grid; grid-template-columns: 44px 1fr; column-gap: 16px; row-gap: 2px; }
+    .fact .icon-dot { grid-row: span 2; margin: 0; }
+    .fact + .fact { padding-left: 0; border-left: 0; padding-top: 20px; border-top: 1px solid var(--color-line); }
+  }
+</style>

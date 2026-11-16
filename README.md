@@ -6,6 +6,24 @@
 - `apps/crm` — CRM на Next.js (пізніше)
 - `design` — кольори, шрифти й відступи бренду
 
+## Команди
+
+Потрібні Node.js 22+ і pnpm. Усі команди — з кореня репозиторію:
+
+- `pnpm install` — встановити залежності (один раз);
+- `pnpm dev` — запустити сайт локально: http://localhost:4321;
+- `pnpm build` — зібрати сайт у `apps/site/dist/`;
+- `pnpm preview` — переглянути зібрану версію.
+
+Де що міняти:
+
+- рослини, ціни, наявність — `apps/site/data/plants.json` (фото — у `apps/site/src/assets/images/plants/`);
+- сезонний календар — `apps/site/data/season.json`;
+- телефони, пошта, посилання на месенджери й соцмережі — `apps/site/src/config/site.ts`;
+- кольори бренду — `design/tokens.json`.
+
+Розгортання на сервері — `apps/site/docs/deploy.md`.
+
 ## Як почати в Claude Code
 
 1. Скопіюйте вміст цього архіву в корінь вашого репозиторію й зробіть коміт.
