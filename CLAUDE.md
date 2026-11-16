@@ -51,7 +51,7 @@ design/         — дизайн-токени бренду (tokens.json), спі
 
 ## Бренд
 
-- **Логотип — тільки оригінальний**, з `apps/site/public/logo/`. Форму не змінювати й не перемальовувати. На темному фоні — `yaremiia-logo-horizontal-on-dark.svg`, на світлому — `yaremiia-logo-horizontal.svg`. Фавікон — `apps/site/public/favicon.svg` (паросток).
+- **Логотип — тільки оригінальний**, з `apps/site/public/logo/`. Форму не змінювати й не перемальовувати. На сайті — **веб-версія** з чіткішим підписом для малих розмірів: на темному фоні `yaremiia-logo-web-on-dark.svg`, на світлому — `yaremiia-logo-web.svg`. Оригінальні файли (`yaremiia-logo-horizontal*.svg` та інші) — для друку й великих розмірів. Фавікон — `apps/site/public/favicon.svg` (паросток).
 - **Кольори** (усі токени — `design/tokens.json`):
   - хвоя (основний темний, текст) `#1F2E22`; футер `#17231A`;
   - стебло `#5E8746`; паросток (акцент на темному) `#9CC27A`;
