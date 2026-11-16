@@ -107,7 +107,7 @@ const chips: { label: string; icon: IconName; filter: string }[] = [
     justify-content: center;
     gap: 26px;
     width: 100%;
-    max-width: 960px;
+    max-width: calc(960px + 64px); /* 960 px — сам текст, 32 px відступи з боків поза ним */
     margin: 0 auto;
     /* зверху — місце під шапку (~88 px), яка лежить поверх фото */
     padding: calc(88px + 96px) 32px 72px;
