@@ -6,3 +6,6 @@ dist/
 .env.*
 !.env.example
 .DS_Store
+
+# Завдання від Claude-дизайнера — ніколи не комітимо
+/ai_tasks/
