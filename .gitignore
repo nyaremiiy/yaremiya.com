@@ -9,3 +9,7 @@ dist/
 
 # Завдання від Claude-дизайнера — ніколи не комітимо
 /ai_tasks/
+
+# Next.js (CRM)
+next-env.d.ts
+*.tsbuildinfo

@@ -1,0 +1,62 @@
+@import "@fontsource/montserrat/400.css";
+@import "@fontsource/montserrat/500.css";
+@import "@fontsource/montserrat/600.css";
+@import "@fontsource/montserrat/700.css";
+
+/* Токени бренду — значення з design/tokens.json (світла тема). */
+:root {
+  --surface-100: #f0f3ee;
+  --surface-200: #ffffff;
+  --surface-300: #e3eadf;
+  --forest: #1f2e22;
+  --ink: #1f2e22;
+  --ink-muted: #4a5747;
+  --ink-on-forest: #f0f3ee;
+  --ink-on-forest-muted: #c9d6c1;
+  --brand: #5e8746;
+  --brand-strong: #4d7339;
+  --on-brand: #ffffff;
+  --leaf: #9cc27a;
+  --border: #c9d3c4;
+  --border-soft: #dce3d7;
+  --error: #b3261e;
+  --error-text: #8e2a22;
+  --error-bg: #f6e1df;
+
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --font-sans: Montserrat, system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--surface-100);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 3px solid var(--leaf);
+  outline-offset: 2px;
+}
