@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "pnpm --filter site dev",
     "build": "pnpm --filter site build",
-    "preview": "pnpm --filter site preview"
+    "preview": "pnpm --filter site preview",
+    "dev:crm": "pnpm --filter crm dev",
+    "build:crm": "pnpm --filter crm build"
   },
   "packageManager": "pnpm@11.4.0"
 }
