@@ -154,8 +154,8 @@ export default function LoginForm() {
       <div id="forgot-help" hidden={!showForgot} className={`${styles.notice} ${styles.noticeHelp}`}>
         <Info strokeWidth={1.75} aria-hidden="true" />
         <p>
-          Відновлення пароля робить адміністратор. Зверніться до нього — він видасть
-          новий тимчасовий пароль, який ви зміните під час входу.
+          Паролі створює й змінює лише адміністратор. Зверніться до нього — він
+          видасть вам новий пароль.
         </p>
       </div>
 

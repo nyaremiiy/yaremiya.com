@@ -191,6 +191,21 @@
   padding: 0 15.5px;
 }
 
+/* Фокус у полі — без зовнішньої обвідки, лише темно-зелена рамка. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  border-color: var(--brand-strong);
+  box-shadow: 0 0 0 1px var(--brand-strong);
+}
+
+/* Фокус у полі з помилкою — лише червона рамка. */
+.input[aria-invalid="true"]:focus,
+.input[aria-invalid="true"]:focus-visible {
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
+}
+
 .passwordWrap {
   position: relative;
 }
@@ -198,6 +213,13 @@
 .passwordInput,
 .passwordInput[aria-invalid="true"] {
   padding-right: 52px;
+}
+
+/* У Montserrat крапки пароля дуже дрібні — для прихованого пароля беремо системний шрифт. */
+.passwordInput[type="password"]:not(:placeholder-shown) {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.06em;
 }
 
 .eye {
