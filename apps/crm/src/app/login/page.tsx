@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
+import { safeNextPath } from "@/lib/redirects";
 import LoginForm from "./LoginForm";
 import styles from "./login.module.css";
 
@@ -7,7 +8,14 @@ export const metadata: Metadata = {
   title: "Вхід",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string | string[] }>;
+}) {
+  const { next } = await searchParams;
+  const nextPath = safeNextPath(Array.isArray(next) ? next[0] : next);
+
   return (
     <div className={styles.page}>
       <aside className={styles.brand}>
@@ -42,7 +50,7 @@ export default function LoginPage() {
       </aside>
 
       <main className={styles.main}>
-        <LoginForm />
+        <LoginForm nextPath={nextPath} />
       </main>
 
       <p className={styles.domainLight}>crm.yaremiya.com</p>

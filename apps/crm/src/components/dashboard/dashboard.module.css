@@ -1,0 +1,1176 @@
+/* Дашборд — специфікація: apps/crm/docs/dashboard.md.
+   Від 900 px — версія для комп'ютера, вужче — для телефона. */
+
+.content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 28px;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.desktopOnly,
+.desktopInline {
+  display: none;
+}
+
+.mobileInline {
+  display: inline;
+}
+
+/* ───── Група й картка ───── */
+
+.group {
+  min-width: 0;
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.groupTitle svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--brand-strong);
+}
+
+.card {
+  background: var(--surface-200);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+}
+
+.cardHead,
+.cardHeadDivided {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.cardHeadDivided {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.cardTitle svg {
+  width: 19px;
+  height: 19px;
+  flex-shrink: 0;
+  color: var(--brand-strong);
+}
+
+.amberIcon {
+  color: var(--amber-icon) !important;
+}
+
+.cardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--brand-strong);
+  text-decoration: none;
+  white-space: nowrap;
+  border-radius: 6px;
+}
+
+.cardLink:hover {
+  text-decoration: underline;
+}
+
+.cardLink svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cardMeta {
+  font-size: 13px;
+  color: var(--ink-muted);
+}
+
+.dividedList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.dividedList > li + li {
+  border-top: 1px solid var(--border-soft);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ───── Тони ───── */
+
+.tone_blue {
+  background: var(--tone-blue-bg);
+  color: var(--tone-blue-fg);
+}
+
+.tone_green {
+  background: var(--tone-green-bg);
+  color: var(--tone-green-fg);
+}
+
+.tone_amber {
+  background: var(--tone-amber-bg);
+  color: var(--tone-amber-fg);
+}
+
+.tone_leaf {
+  background: var(--tone-leaf-bg);
+  color: var(--tone-leaf-fg);
+}
+
+.tone_grey {
+  background: var(--tone-grey-bg);
+  color: var(--tone-grey-fg);
+}
+
+.tone_red {
+  background: var(--tone-red-bg);
+  color: var(--tone-red-fg);
+}
+
+.statusPill,
+.qtyPill,
+.channelPill {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.qtyPill {
+  flex-shrink: 0;
+}
+
+.channelPill {
+  height: 24px;
+  padding: 0 10px;
+  font-weight: 600;
+  background: var(--tone-green-bg);
+  color: var(--tone-green-fg);
+}
+
+/* ───── Показники (комп'ютер) ───── */
+
+.metrics {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.metric {
+  padding: 22px;
+}
+
+.metricHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.metricTitle {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.metricIcon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.metricIcon svg {
+  width: 19px;
+  height: 19px;
+}
+
+.metricValue {
+  margin: 14px 0 0;
+  font-size: 30px;
+  line-height: 34px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.metricCaption {
+  margin: 13px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+/* ───── Показники (телефон) ───── */
+
+.metricsMobile {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metricMobile {
+  padding: 16px;
+}
+
+.metricMobileValue {
+  margin: 14px 0 0;
+  font-size: 22px;
+  line-height: 26px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.metricMobileLabel {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 0 0;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.metricMobileCaption {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+/* ───── Останні замовлення (таблиця) ───── */
+
+.ordersLayout,
+.teamLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.ordersCard {
+  padding: 18px 0 10px;
+}
+
+.ordersCard .cardHead {
+  padding: 0 22px 4px;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+}
+
+.table thead th {
+  padding: 10px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--border-soft);
+  white-space: nowrap;
+}
+
+.table tbody th,
+.table tbody td {
+  padding: 12px 16px;
+  height: 62px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.table thead th:first-child,
+.table tbody th {
+  padding-left: 22px;
+}
+
+.table thead th:last-child,
+.table tbody td:last-child {
+  padding-right: 22px;
+}
+
+.orderNumber {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.clientName {
+  display: block;
+  white-space: nowrap;
+}
+
+.clientDate {
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.orderPlants {
+  color: var(--ink-muted);
+  min-width: 180px;
+}
+
+.orderTotal {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ───── Бічна колонка: заявки, закінчуються ───── */
+
+.sideColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.sideCard {
+  padding: 22px;
+}
+
+.sideCardTitle {
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.lead {
+  padding: 12px 0;
+}
+
+.lead:last-child {
+  padding-bottom: 0;
+}
+
+.leadHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+}
+
+.leadPhone {
+  color: var(--ink-muted);
+}
+
+.leadAgo {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.leadText {
+  margin: 8px 0 12px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink);
+}
+
+.leadFoot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.contactButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 10px;
+  background: var(--brand-strong);
+  color: var(--on-brand);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.contactButton:hover {
+  background: #436531;
+}
+
+.contactButton svg {
+  width: 16px;
+  height: 16px;
+}
+
+.lowItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.lowItem:last-child {
+  padding-bottom: 0;
+}
+
+.lowPhoto,
+.stockPhoto {
+  flex-shrink: 0;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--surface-300);
+}
+
+.lowPhoto {
+  width: 44px;
+  height: 44px;
+}
+
+.stockPhoto {
+  width: 48px;
+  height: 48px;
+}
+
+.lowText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lowName {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.lowPot {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+}
+
+/* ───── Продажі ───── */
+
+.salesCard {
+  padding: 22px;
+}
+
+.salesList {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.salesRow {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.salesName {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.salesValue {
+  font-size: 14px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  text-align: right;
+}
+
+.salesValue strong {
+  color: var(--ink);
+}
+
+.bar {
+  display: block;
+  height: 14px;
+  border-radius: var(--radius-pill);
+  background: #eef2ec;
+  overflow: hidden;
+}
+
+.barThin {
+  height: 10px;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--brand-strong);
+}
+
+.salesListMobile {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.salesRowMobile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.salesRowMobileHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ───── Активність і команда (адмін) ───── */
+
+.event {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.event:last-child {
+  padding-bottom: 0;
+}
+
+.eventStacked {
+  grid-template-columns: 34px minmax(0, 1fr);
+}
+
+.eventStacked .eventTime {
+  grid-column: 2;
+  margin-top: -8px;
+}
+
+.eventIcon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-300);
+  color: var(--brand-strong);
+}
+
+.eventIcon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.eventIconDanger {
+  background: var(--tone-red-bg);
+  color: var(--tone-red-fg);
+}
+
+.eventText {
+  margin: 0;
+  padding-top: 6px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink);
+}
+
+.eventTime {
+  padding-top: 7px;
+  font-size: 12px;
+  line-height: 18px;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.teamRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.teamRow:last-child {
+  padding-bottom: 0;
+}
+
+.teamRowDisabled {
+  opacity: 0.5;
+}
+
+.teamInitial {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.teamInitial_admin {
+  background: var(--role-admin-bg);
+  color: var(--role-admin-fg);
+}
+
+.teamInitial_manager {
+  background: var(--role-manager-bg);
+  color: var(--role-manager-fg);
+}
+
+.teamInitial_worker {
+  background: var(--role-worker-bg);
+  color: var(--role-worker-fg);
+}
+
+.teamText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.teamName {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.teamRole {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--ink-muted);
+}
+
+.teamOnline,
+.teamLastSeen,
+.teamDisabled {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.teamOnline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--tone-green-fg);
+}
+
+.onlineDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+}
+
+.teamLastSeen {
+  color: var(--ink);
+}
+
+.teamDisabled {
+  font-weight: 500;
+  color: var(--ink-muted);
+}
+
+/* ───── Картки телефона ───── */
+
+.mobileCard {
+  padding: 18px;
+}
+
+.mobileListCard {
+  padding: 6px 18px 0;
+}
+
+.contactButtonMobile {
+  height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+}
+
+.orderMobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.orderMobileText {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.orderMobileTitle {
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--ink);
+}
+
+.orderMobileMeta {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+.orderMobileMeta strong {
+  color: var(--ink);
+}
+
+.mobileCardLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  margin: 0 -18px;
+  border-top: 1px solid var(--border-soft);
+  border-radius: 0 0 18px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--brand-strong);
+  text-decoration: none;
+}
+
+.mobileCardLink svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* ───── Працівник ───── */
+
+.counters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 8px;
+  text-align: center;
+}
+
+.counterIcon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.counterIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.counterText {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.counterValue {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.counterLabel {
+  font-size: 13px;
+  line-height: 17px;
+  color: var(--ink-muted);
+}
+
+.workerLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.workerCard {
+  padding: 4px 18px 18px;
+}
+
+.prepareRow {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.prepareRow:last-child {
+  padding-bottom: 0;
+}
+
+.prepareRowDone .prepareText {
+  opacity: 0.55;
+}
+
+.prepareText {
+  min-width: 0;
+  flex: 1;
+}
+
+.prepareTitle {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--ink);
+}
+
+.prepareClient {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.prepareItems {
+  margin: 4px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--ink);
+}
+
+.prepareDelivery {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+.prepareDelivery svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--brand-strong);
+}
+
+.readyButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--brand-strong);
+  border-radius: 10px;
+  background: var(--brand-strong);
+  color: var(--on-brand);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.readyButton:hover {
+  background: #436531;
+}
+
+.readyButton svg {
+  width: 17px;
+  height: 17px;
+}
+
+.readyButtonDone,
+.readyButtonDone:hover {
+  border-color: var(--leaf);
+  background: var(--tone-green-bg);
+  color: var(--tone-green-fg);
+}
+
+.stockRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.stepButton {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-200);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.stepButton:hover:not(:disabled) {
+  border-color: var(--brand-strong);
+}
+
+.stepButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.stepButton svg {
+  width: 17px;
+  height: 17px;
+}
+
+.stepValue {
+  min-width: 26px;
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.saveButton {
+  width: 100%;
+  height: 48px;
+  margin-top: 14px;
+  border: 1.5px solid var(--brand-strong);
+  border-radius: 10px;
+  background: #f3f7f0;
+  color: var(--tone-green-fg);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--tone-green-bg);
+}
+
+.saveButton:disabled {
+  cursor: progress;
+}
+
+.saveStatus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tone-green-fg);
+}
+
+.saveStatus:not(:empty) {
+  margin-top: 12px;
+}
+
+.saveStatus svg {
+  width: 17px;
+  height: 17px;
+}
+
+.workerHint {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--surface-300);
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink);
+}
+
+.workerHint svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  margin-top: 1.5px;
+  color: var(--brand-strong);
+}
+
+/* ───── Комп'ютер (від 900 px) ───── */
+
+@media (min-width: 900px) {
+  .content {
+    max-width: none;
+    margin: 0;
+    padding: 28px 36px 48px;
+  }
+
+  .groups {
+    gap: 36px;
+  }
+
+  .desktopOnly {
+    display: flex;
+  }
+
+  .desktopInline {
+    display: inline;
+  }
+
+  .mobileOnly,
+  .mobileInline {
+    display: none;
+  }
+
+  .counters {
+    gap: 20px;
+  }
+
+  .counter {
+    flex-direction: row;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    text-align: left;
+  }
+
+  .counterText {
+    align-items: flex-start;
+  }
+
+  .counterValue {
+    font-size: 26px;
+    line-height: 30px;
+  }
+
+  .workerCard {
+    padding: 4px 22px 22px;
+  }
+
+  .prepareRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 0;
+  }
+
+  .readyButton {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .workerHint {
+    align-items: center;
+    padding: 16px 20px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .workerLayout {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 20px;
+  }
+}
+
+/* Широкий екран: склад замовлення — в один рядок, як на макеті. */
+@media (min-width: 1380px) {
+  .orderPlants {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 1280px) {
+  .ordersLayout {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+
+  .teamLayout {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+  }
+}

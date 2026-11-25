@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
-// Поки головна CRM — це сторінка входу.
+// Поки авторизації немає — одразу на дашборд.
+// Потім: залогінений → /dashboard, інакше → /login.
 export default function Home() {
-  redirect("/login");
+  redirect("/dashboard");
 }

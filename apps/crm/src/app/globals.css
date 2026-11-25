@@ -23,6 +23,35 @@
   --error-text: #8e2a22;
   --error-bg: #f6e1df;
 
+  /* CRM: каркас */
+  --forest-raised: #2a3b2d; /* картка користувача в меню */
+  --forest-active: #2f4632; /* активний пункт меню */
+  --badge-red: #d2453b;
+  --amber-icon: #b7791f;
+  --card-shadow: 0 1px 2px rgba(31, 46, 34, 0.06), 0 6px 18px rgba(31, 46, 34, 0.06);
+
+  /* CRM: кольори ролей (плашка й кружечок-ініціал) */
+  --role-admin-bg: #1f2e22;
+  --role-admin-fg: #f0f3ee;
+  --role-manager-bg: #e6f0de;
+  --role-manager-fg: #3f6130;
+  --role-worker-bg: #f7ebd6;
+  --role-worker-fg: #7a4f0e;
+
+  /* CRM: тони показників і статусів */
+  --tone-blue-bg: #e3ecf7;
+  --tone-blue-fg: #1f4e86;
+  --tone-green-bg: #e6f0de;
+  --tone-green-fg: #3f6130;
+  --tone-amber-bg: #f7ebd6;
+  --tone-amber-fg: #7a4f0e;
+  --tone-leaf-bg: #e3eadf;
+  --tone-leaf-fg: #3f6130;
+  --tone-grey-bg: #ecefea;
+  --tone-grey-fg: #3e4c3b;
+  --tone-red-bg: #f6e1df;
+  --tone-red-fg: #8e2a22;
+
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 20px;
@@ -59,4 +88,30 @@ input {
 :focus-visible {
   outline: 3px solid var(--leaf);
   outline-offset: 2px;
+}
+
+/* Текст лише для читалок екрана. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+a {
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
