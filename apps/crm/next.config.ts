@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
   turbopack: { root: monorepoRoot },
   poweredByHeader: false,
   devIndicators: false,
+  // forbidden() — екран «Немає доступу» зі статусом 403.
+  experimental: { authInterrupts: true },
 };
 
 export default nextConfig;

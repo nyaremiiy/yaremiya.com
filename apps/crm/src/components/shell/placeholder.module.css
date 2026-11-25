@@ -1,0 +1,72 @@
+/* «Немає доступу» і «Розділ у розробці» — по центру вмісту. */
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 64px 16px 48px;
+  text-align: center;
+}
+
+.placeholderIcon {
+  width: 72px;
+  height: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-300);
+  color: var(--brand-strong);
+}
+
+.placeholderIcon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.placeholderTitle {
+  margin: 6px 0 0;
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.placeholderText {
+  margin: 0;
+  font-size: 15px;
+  line-height: 25px;
+  color: var(--ink-muted);
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 48px;
+  margin-top: 6px;
+  padding: 0 22px;
+  border-radius: 10px;
+  background: var(--brand-strong);
+  color: var(--on-brand);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.backButton:hover {
+  background: #436531;
+}
+
+.backButton svg {
+  width: 17px;
+  height: 17px;
+}
+
+@media (min-width: 900px) {
+  .placeholder {
+    padding-top: 18vh;
+  }
+}

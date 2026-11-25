@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { CircleAlert, Eye, EyeOff, Info, Lock, LogIn } from "lucide-react";
 import { signIn } from "@/lib/auth";
 import styles from "./login.module.css";
@@ -8,7 +9,8 @@ import styles from "./login.module.css";
 type FieldErrors = { email?: string; password?: string };
 type Status = "idle" | "submitting" | "invalid" | "not-connected";
 
-export default function LoginForm() {
+export default function LoginForm({ nextPath }: { nextPath: string }) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
@@ -41,8 +43,8 @@ export default function LoginForm() {
     const result = await signIn(email.trim(), password, remember);
 
     if (result.ok) {
-      // Після справжнього входу тут буде перехід до огляду CRM.
-      setStatus("idle");
+      // Кнопка лишається в стані «Входимо…», доки відкривається потрібна сторінка.
+      router.push(nextPath);
       return;
     }
     setStatus(result.error === "invalid-credentials" ? "invalid" : "not-connected");
