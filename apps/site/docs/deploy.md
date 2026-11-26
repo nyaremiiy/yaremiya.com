@@ -7,7 +7,7 @@
 ## 1. Один раз: підготувати сервер
 
 ```bash
-# Node.js 24 (Astro потрібна 22.23+; у репозиторії — .nvmrc з 24) і pnpm
+# Node.js 22+ і pnpm (потрібну для сайту Node 24 pnpm завантажить сам — див. devEngines у package.json)
 curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs git
 sudo corepack enable
