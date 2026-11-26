@@ -7,8 +7,8 @@
 ## 1. Один раз: підготувати сервер
 
 ```bash
-# Node.js 22+ і pnpm
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+# Node.js 24 (Astro потрібна 22.23+; у репозиторії — .nvmrc з 24) і pnpm
+curl -fsSL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 sudo apt install -y nodejs git
 sudo corepack enable
 
@@ -59,13 +59,33 @@ sudo nginx -t && sudo systemctl reload nginx
 
 Certbot сам оновлює сертифікат за розкладом.
 
+## 3а. Один раз: база, фото й автоматичне оновлення після змін у CRM
+
+Рослини на сайті беруться з бази PostgreSQL (їх змінюють у CRM). Сайт читає базу **під час збирання**, тому:
+
+1. У `/opt/yaremiya/.env` (зразок — `.env.example` у корені) мають бути:
+   - `DATABASE_URL` — адреса основної бази;
+   - `UPLOADS_DIR` — папка фото поза репозиторієм, наприклад `/var/lib/yaremiya/uploads` (`sudo mkdir -p … && sudo chown yaremiya …`). Ту саму папку використовує CRM;
+   - `SITE_REBUILD_URL=http://127.0.0.1:8790/rebuild` і `SITE_REBUILD_SECRET` — випадковий рядок (`openssl rand -hex 32`).
+2. Запустити сервіс, який перезбирає сайт після змін у CRM:
+   ```bash
+   sudo cp /opt/yaremiya/apps/site/deploy/yaremiya-site-rebuilder.service /etc/systemd/system/
+   # у файлі сервісу перевірте User= — користувач, якому належать /opt/yaremiya і /var/www/yaremiya
+   sudo systemctl daemon-reload && sudo systemctl enable --now yaremiya-site-rebuilder
+   journalctl -u yaremiya-site-rebuilder -f   # журнал
+   ```
+   Як це працює: після збереження рослини CRM надсилає сервісу сигнал; той чекає 60 с (кілька змін підряд — одне збирання), збирає сайт (`update-site.sh --rebuild`) і миттєво підміняє його. Сервіс слухає лише `127.0.0.1` і приймає сигнал тільки із секретом. Якщо збирання не вдалося (наприклад, база недоступна) — лишається попередня версія сайту.
+3. Фото рослин копіюються в кожну версію сайту (`/media/...`), Caddy/nginx віддають їх як звичайні файли з довгим кешем.
+
+Вручну перезібрати сайт з бази: `bash /opt/yaremiya/apps/site/deploy/update-site.sh --rebuild`. Локально: `pnpm site:rebuild`.
+
 ## 4. Оновити сайт (щоразу після змін)
 
 ```bash
 bash /opt/yaremiya/apps/site/deploy/update-site.sh
 ```
 
-Скрипт забирає свіжий код, збирає сайт і миттєво перемикає на нову версію. Зберігаються 5 останніх версій.
+Скрипт забирає свіжий код, встановлює залежності, застосовує міграції бази (`pnpm db:migrate`, на основному сервері — з резервною копією), збирає сайт і миттєво перемикає на нову версію. Зберігаються 5 останніх версій.
 
 Якщо щось пішло не так — повернути попередню версію:
 

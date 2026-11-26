@@ -1,34 +1,35 @@
 ---
-import { Picture } from 'astro:assets';
 import Icon from './Icon.astro';
-import { assetImage } from '../lib/images';
-import { categoryLabel, statuses, type Plant } from '../lib/data';
+import { statuses, type Plant } from '../lib/data';
 import { routes } from '../config/site';
 
 interface Props {
   plant: Plant;
 }
 const { plant } = Astro.props;
-const img = assetImage(plant.photo);
 const status = statuses[plant.status];
 const href = routes.plant(plant.slug);
-// Фото рослин бувають малими (250–550 px) — не збільшуємо їх більше оригіналу.
-const widths = [320, 480, 640].filter((w) => w <= img.width);
-if (!widths.length || widths[widths.length - 1] < img.width) widths.push(Math.min(img.width, 640));
+// Фото вже підготовлені під час завантаження в CRM (квадрат, WebP 400 / 800 / 1600 px).
+const photo = plant.photo;
 ---
 
-<article class="plant card" data-category={plant.category} data-slug={plant.slug}>
+<article class="plant card" data-category={plant.categorySlug} data-slug={plant.slug}>
   <div class="plant__media">
     <a href={href} tabindex="-1" aria-hidden="true">
-      <Picture
-        src={img}
-        formats={['avif', 'webp']}
-        widths={[...new Set(widths)]}
-        sizes="(max-width: 599px) 50vw, 320px"
-        alt={plant.name}
-        loading="lazy"
-        decoding="async"
-      />
+      {photo ? (
+        <img
+          src={photo.src800}
+          srcset={`${photo.src400} 400w, ${photo.src800} 800w`}
+          sizes="(max-width: 599px) 50vw, 320px"
+          width={Math.min(photo.width, 800)}
+          height={Math.min(photo.height, 800)}
+          alt={photo.alt}
+          loading="lazy"
+          decoding="async"
+        />
+      ) : (
+        <span class="plant__nophoto" aria-hidden="true"><Icon name="sprout" size={40} /></span>
+      )}
     </a>
     <span class="plant__status" style={`background:${status.bg};color:${status.fg}`}>{status.text}</span>
     <button
@@ -44,9 +45,9 @@ if (!widths.length || widths[widths.length - 1] < img.width) widths.push(Math.mi
   </div>
 
   <div class="plant__body">
-    <p class="plant__cat">{categoryLabel(plant.category)}</p>
+    <p class="plant__cat">{plant.categoryName}</p>
     <h3 class="plant__name"><a href={href}>{plant.name}</a></h3>
-    <p class="plant__detail">{plant.detail}</p>
+    {plant.shortDescription && <p class="plant__detail">{plant.shortDescription}</p>}
 
     <div class="plant__foot">
       {plant.priceFrom != null ? (
@@ -56,7 +57,7 @@ if (!widths.length || widths[widths.length - 1] < img.width) widths.push(Math.mi
           {plant.unit && <span class="price__unit">/{plant.unit}</span>}
         </p>
       ) : (
-        <p class="plant__noprice">{plant.priceText ?? 'Ціна навесні'}</p>
+        <p class="plant__noprice">Ціна навесні</p>
       )}
       <a class="plant__order" href="#order-form" data-order={plant.name}>
         <Icon name="message-circle" size={18} />
@@ -93,6 +94,12 @@ if (!widths.length || widths[widths.length - 1] < img.width) widths.push(Math.mi
   }
   .plant:hover .plant__media :global(img) { transform: scale(1.03); }
   .plant__media > a { display: block; height: 100%; overflow: hidden; }
+  .plant__nophoto {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    color: var(--color-brand-strong);
+  }
 
   .plant__status {
     position: absolute;

@@ -17,6 +17,10 @@ yaremiya.com {
 	@media path /logo/* /favicon.svg
 	header @media Cache-Control "public, max-age=604800"
 
+	# Фото рослин: назви файлів випадкові й не змінюються — кешуємо надовго.
+	@plantphotos path /media/*
+	header @plantphotos Cache-Control "public, max-age=31536000, immutable"
+
 	@html path / *.html
 	header @html Cache-Control "public, max-age=0, must-revalidate"
 
