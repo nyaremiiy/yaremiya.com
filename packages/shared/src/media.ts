@@ -8,6 +8,7 @@
  */
 
 import { randomBytes } from "node:crypto";
+import { existsSync } from "node:fs";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp, { type Metadata } from "sharp";
@@ -20,11 +21,25 @@ export const MIN_RECOMMENDED_PX = 800;
 
 export class PhotoError extends Error {}
 
+/**
+ * Корінь монорепо — шукаємо вгору від робочої папки файл pnpm-workspace.yaml.
+ * (Не через import.meta.dirname: у зібраному Next.js він порожній.)
+ */
+function repoRoot(): string {
+  let dir = process.cwd();
+  for (;;) {
+    if (existsSync(path.join(dir, "pnpm-workspace.yaml"))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return process.cwd();
+    dir = parent;
+  }
+}
+
 /** Папка завантажень. Без UPLOADS_DIR — `uploads/` у корені репозиторію (лише для розробки; у .gitignore). */
 export function uploadsDir(): string {
   const dir = process.env.UPLOADS_DIR?.trim();
   if (dir) return path.resolve(dir);
-  return path.resolve(import.meta.dirname, "../../../uploads");
+  return path.join(repoRoot(), "uploads");
 }
 
 /** Публічна адреса фото: `/media/plants/12/ab12cd-800.webp`. */
