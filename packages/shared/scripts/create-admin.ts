@@ -9,7 +9,7 @@ import { sql } from "drizzle-orm";
 import { auditLog, users } from "../src/db/schema";
 import { closeDb, getDb } from "../src/db/client";
 import { hashPassword, isValidLogin, normalizeLogin, PASSWORD_MIN_LENGTH } from "../src/users";
-import { requireEnv } from "./env";
+import { requireEnv, errorText } from "./env";
 
 requireEnv("DATABASE_URL");
 const login = normalizeLogin(requireEnv("ADMIN_LOGIN"));
@@ -54,7 +54,7 @@ try {
     }
   }
 } catch (err) {
-  console.error(`✗ ${(err as Error).message}`);
+  console.error(`✗ ${errorText(err)}`);
   process.exitCode = 1;
 } finally {
   await closeDb();

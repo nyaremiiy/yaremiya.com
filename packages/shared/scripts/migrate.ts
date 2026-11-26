@@ -7,7 +7,7 @@
 import path from "node:path";
 import { migrate } from "drizzle-orm/postgres-js/migrator";
 import { closeDb, getDb } from "../src/db/client";
-import { isProduction, requireEnv } from "./env";
+import { isProduction, requireEnv, errorText } from "./env";
 import { backupDatabase } from "./backup-lib";
 
 requireEnv("DATABASE_URL");
@@ -21,7 +21,7 @@ try {
   await migrate(getDb(), { migrationsFolder: path.resolve(import.meta.dirname, "../drizzle") });
   console.log("✓ Міграції застосовано — база в актуальному стані.");
 } catch (err) {
-  console.error(`✗ Міграції не застосовано: ${(err as Error).message}`);
+  console.error(`✗ Міграції не застосовано: ${errorText(err)}`);
   process.exitCode = 1;
 } finally {
   await closeDb();

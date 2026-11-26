@@ -11,7 +11,7 @@ import { sql } from "drizzle-orm";
 import { auditLog, users, type Role } from "../src/db/schema";
 import { closeDb, getDb } from "../src/db/client";
 import { hashPassword } from "../src/users";
-import { isProduction, requireEnv } from "./env";
+import { isProduction, requireEnv, errorText } from "./env";
 
 if (isProduction) {
   console.error("✗ db:seed заборонено на основному сервері (APP_ENV=production).");
@@ -48,7 +48,7 @@ try {
   }
   console.log("Демо-дані готові. Паролі показано лише зараз — збережіть, якщо потрібні.");
 } catch (err) {
-  console.error(`✗ ${(err as Error).message}`);
+  console.error(`✗ ${errorText(err)}`);
   process.exitCode = 1;
 } finally {
   await closeDb();
