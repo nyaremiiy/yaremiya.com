@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
-import type { DemoUser } from "@/lib/demo-data";
+import type { CurrentUser } from "@/lib/current-user";
 import { seasonNote } from "@/lib/demo-data";
 import { formatToday } from "@/lib/format";
 import { can } from "@/lib/permissions";
@@ -14,7 +14,7 @@ import styles from "./shell.module.css";
  * Без `title` — привітання з датою (дашборд), з `title` — назва розділу.
  * На телефоні — без пошуку й кнопок (вони в шапці), лише заголовок.
  */
-export default function TopBar({ user, title }: { user: DemoUser; title?: ReactNode }) {
+export default function TopBar({ user, title }: { user: CurrentUser; title?: ReactNode }) {
   const isGreeting = title === undefined;
   const today = formatToday();
   const note = user.role === "worker" ? "ось що треба зробити сьогодні" : seasonNote;

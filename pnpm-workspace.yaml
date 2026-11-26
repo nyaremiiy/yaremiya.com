@@ -1,6 +1,7 @@
 packages:
   - "apps/*"
   - "packages/*"
-onlyBuiltDependencies:
-  - sharp
-  - esbuild
+# Яким пакетам дозволено запускати скрипти встановлення (pnpm 11).
+allowBuilds:
+  esbuild: true
+  sharp: true

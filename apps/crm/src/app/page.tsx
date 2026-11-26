@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/session";
 
-// Поки авторизації немає — одразу на дашборд.
-// Потім: залогінений → /dashboard, інакше → /login.
-export default function Home() {
-  redirect("/dashboard");
+// Увійшли → дашборд, інакше → сторінка входу.
+export default async function Home() {
+  redirect((await getCurrentUser()) ? "/dashboard" : "/login");
 }

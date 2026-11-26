@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { LogOut } from "lucide-react";
-import type { DemoUser } from "@/lib/demo-data";
+import { signOut } from "@/lib/auth";
+import type { CurrentUser } from "@/lib/current-user";
 import { ROLE_LABELS } from "@/lib/permissions";
 import BellButton from "./BellButton";
 import Dropdown from "./Dropdown";
 import styles from "./shell.module.css";
 
 /** Темна шапка на телефоні: логотип, дзвіночок, кружечок-ініціал (меню з «Вийти»). */
-export default function MobileHeader({ user }: { user: DemoUser }) {
+export default function MobileHeader({ user }: { user: CurrentUser }) {
   return (
     <header className={styles.mobileHeader}>
       <Link href="/dashboard" className={styles.mobileLogoLink}>
@@ -32,10 +33,12 @@ export default function MobileHeader({ user }: { user: DemoUser }) {
             <span className={styles.menuUserName}>{user.name}</span>
             <span className={styles.menuUserRole}>{ROLE_LABELS[user.role]}</span>
           </div>
-          <Link href="/login" className={styles.menuLink}>
-            <LogOut strokeWidth={1.75} aria-hidden="true" />
-            Вийти
-          </Link>
+          <form action={signOut}>
+            <button type="submit" className={`${styles.menuLink} ${styles.menuButton}`}>
+              <LogOut strokeWidth={1.75} aria-hidden="true" />
+              Вийти
+            </button>
+          </form>
         </Dropdown>
       </div>
     </header>
