@@ -124,11 +124,6 @@ export type LowStockItem = {
   image: string;
 };
 
-export const lowStock: LowStockItem[] = [
-  { id: "p-lavender-2l", name: "Лаванда — дорослий кущ", pot: "Горщик 2 л", qty: 4, image: "/demo/lavender-bush.jpg" },
-  { id: "p-chrysanthemum-pink", name: "Хризантема мультифлора рожева", pot: "Горщик 3 л", qty: 3, image: "/demo/chrysanthemum-multiflora.jpg" },
-  { id: "p-boxwood-ball", name: "Самшит — сформована куля", pot: "Горщик 10 л", qty: 2, image: "/demo/boxwood-ball.jpg" },
-];
 
 /* ───── Продажі ───── */
 

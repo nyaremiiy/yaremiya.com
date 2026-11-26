@@ -21,7 +21,7 @@ export default function TabBar({ role }: { role: Role }) {
   const moreActive = more.some((item) => isActive(pathname, item.href));
 
   return (
-    <nav aria-label="Розділи CRM" className={styles.tabBar}>
+    <nav aria-label="Розділи CRM" className={styles.tabBar} data-shell="tab-bar">
       <ul className={styles.tabList}>
         {tabs.map((item) => (
           <li key={item.section}>

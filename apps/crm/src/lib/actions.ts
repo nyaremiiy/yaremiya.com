@@ -2,10 +2,10 @@
 
 /**
  * Дії Працівника. Права перевіряються тут, на сервері, а не лише в меню.
- * Самі дані поки демо — справжні запити до бази з'являться разом
- * із розділами «Замовлення» й «Рослини».
+ * Залишки — уже з бази; замовлення поки демо (з'являться з розділом «Замовлення»).
  */
 
+import { updateStocks } from "./plant-actions";
 import { authorizeAction } from "./session";
 
 export async function markOrderReady(id: string, ready: boolean): Promise<{ ok: true }> {
@@ -18,9 +18,10 @@ export async function markOrderReady(id: string, ready: boolean): Promise<{ ok: 
 export async function updateStock(
   items: { id: string; qty: number }[],
 ): Promise<{ ok: true }> {
+  // Залишки — з бази: id має вигляд «s-<id розміру>» (див. getLowStockSizes).
   await authorizeAction("plants");
-  void items;
-  // Невелика пауза, щоб було видно стан «Зберігаємо…».
-  await new Promise((resolve) => setTimeout(resolve, 400));
-  return { ok: true };
+  const changes = items
+    .map((item) => ({ sizeId: Number(item.id.replace(/^s-/, "")), stock: item.qty }))
+    .filter((c) => Number.isInteger(c.sizeId));
+  return updateStocks(changes);
 }

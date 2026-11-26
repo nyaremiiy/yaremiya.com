@@ -26,5 +26,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/|favicon.svg|logo/|demo/|robots.txt).*)"],
+  // /media/ — фото рослин, вони публічні (є на сайті).
+  matcher: ["/((?!_next/|favicon.svg|logo/|demo/|media/|robots.txt).*)"],
 };

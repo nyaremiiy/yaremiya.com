@@ -22,7 +22,11 @@ const nextConfig: NextConfig = {
   logging: { serverFunctions: false },
   devIndicators: false,
   // forbidden() — екран «Немає доступу» зі статусом 403.
-  experimental: { authInterrupts: true },
+  experimental: {
+    authInterrupts: true,
+    // Фото рослин — до 15 МБ (+ запас на службові дані форми).
+    proxyClientMaxBodySize: "16mb",
+  },
 };
 
 export default nextConfig;

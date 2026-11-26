@@ -9,7 +9,8 @@
     "./users": "./src/users.ts",
     "./plants": "./src/plants.ts",
     "./media": "./src/media.ts",
-    "./slug": "./src/slug.ts"
+    "./slug": "./src/slug.ts",
+    "./plant-format": "./src/plant-format.ts"
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",

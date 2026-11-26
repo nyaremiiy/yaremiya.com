@@ -20,7 +20,8 @@ export type Capability =
   | "finance" // виручка, продажі, суми
   | "clientContacts" // заявки й контакти клієнтів
   | "createOrders" // кнопка «Нове замовлення»
-  | "teamActivity"; // «Активність у CRM», «Команда»
+  | "teamActivity" // «Активність у CRM», «Команда»
+  | "managePlants"; // додавати й редагувати рослини, ціни, фото, видимість, архів
 
 export const ROLES: Role[] = ["admin", "manager", "worker"];
 
@@ -79,8 +80,8 @@ const ACCESS: Record<Role, Section[]> = {
 };
 
 const CAPABILITIES: Record<Role, Capability[]> = {
-  admin: ["finance", "clientContacts", "createOrders", "teamActivity"],
-  manager: ["finance", "clientContacts", "createOrders"],
+  admin: ["finance", "clientContacts", "createOrders", "teamActivity", "managePlants"],
+  manager: ["finance", "clientContacts", "createOrders", "managePlants"],
   worker: [],
 };
 

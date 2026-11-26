@@ -1,0 +1,795 @@
+/* Редагування й додавання рослини — docs/plants.md, еталони plant-edit*.png. */
+
+.content {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 16px 120px;
+}
+
+.back {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  color: var(--brand-strong);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back svg {
+  width: 16px;
+  height: 16px;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.notice svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.noticeInfo {
+  background: var(--tone-blue-bg);
+  color: var(--tone-blue-fg);
+}
+
+.noticeSaved {
+  background: var(--tone-green-bg);
+  color: var(--tone-green-fg);
+}
+
+.noticeError {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.noticeArchived {
+  background: var(--tone-amber-bg);
+  color: var(--tone-amber-fg);
+}
+
+.noticeArchived button {
+  margin-left: auto;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Телефон: колонки «розчиняються», картки йдуть у своєму порядку. */
+.col {
+  display: contents;
+}
+
+.card {
+  padding: 18px 16px;
+  border-radius: 18px;
+  background: var(--surface-200);
+  box-shadow: var(--card-shadow);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.cardTitle svg {
+  width: 19px;
+  height: 19px;
+  color: var(--brand-strong);
+}
+
+.order1 { order: 1; }
+.order2 { order: 2; }
+.order3 { order: 3; }
+.order4 { order: 4; }
+.order5 { order: 5; }
+.order6 { order: 6; }
+.order7 { order: 7; }
+.order8 { order: 8; }
+
+/* Лише на комп'ютері (на телефоні — підказка внизу). */
+@media (max-width: 899px) {
+  .desktopOnly {
+    display: none !important;
+  }
+}
+
+.mobileHint {
+  order: 9;
+  margin: 4px 0 0;
+  text-align: center;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-muted);
+}
+
+/* ───── Поля ───── */
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+.help {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-muted);
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+  color: var(--error-text);
+}
+
+/* ───── Фото ───── */
+
+.photos {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.photoTile,
+.addTile {
+  position: relative;
+  flex-shrink: 0;
+  width: 112px;
+  height: 112px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.photoTile {
+  padding: 0;
+  border: 2px solid transparent;
+  background: var(--surface-300);
+}
+
+.photoTile[aria-current="true"] {
+  border-color: var(--brand-strong);
+}
+
+.photoTile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoSelect {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.mainBadge {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.mainBadge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.smallBadge {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--tone-amber-bg);
+  color: var(--tone-amber-fg);
+  pointer-events: none;
+}
+
+.smallBadge svg {
+  width: 13px;
+  height: 13px;
+}
+
+.addTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px dashed var(--border);
+  background: #f7f9f5;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addTile:hover {
+  border-color: var(--brand-strong);
+}
+
+.addTile:focus-within {
+  outline: 3px solid var(--leaf);
+  outline-offset: 2px;
+}
+
+.addTile svg {
+  width: 20px;
+  height: 20px;
+  color: var(--brand-strong);
+}
+
+.addTile[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.photoTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0 0;
+}
+
+.toolButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-200);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toolButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.toolButton svg {
+  width: 15px;
+  height: 15px;
+}
+
+.toolDanger {
+  color: var(--error-text);
+}
+
+.spinnerTile {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: var(--surface-300);
+  color: var(--brand-strong);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ───── Розміри ───── */
+
+.sizeHead {
+  display: none;
+}
+
+.sizeRows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sizeRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) 44px;
+  align-items: end;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #f4f7f2;
+}
+
+.sizeHeight {
+  display: none !important;
+}
+
+.sizeField {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.sizeLabel {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sizeField .error {
+  font-size: 12px;
+}
+
+.sizeInput {
+  min-height: 44px;
+  padding: 0 10px;
+}
+
+.deleteSize {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-200);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.deleteSize svg {
+  width: 17px;
+  height: 17px;
+}
+
+.deleteSize:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.addSize {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 48px;
+  margin-top: 12px;
+  border: 1.5px dashed var(--brand);
+  border-radius: 12px;
+  background: #f4f7f2;
+  color: var(--brand-strong);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addSize svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ───── Статус і видимість ───── */
+
+.radios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.radio {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.radio input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.radio:has(input:checked) {
+  border: 2px solid var(--brand-strong);
+  background: var(--tone-green-bg);
+}
+
+.radio:has(input:focus-visible) {
+  outline: 3px solid var(--leaf);
+  outline-offset: 2px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.dot_in_stock { background: var(--brand-strong); }
+.dot_low { background: var(--amber-icon); }
+.dot_preorder { background: #9aa596; }
+
+.visibility {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.visibilityText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.visibilityText small {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-muted);
+}
+
+/* ───── Сезон ───── */
+
+.months {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.month {
+  height: 42px;
+  padding: 0;
+  border: 0;
+  border-radius: 10px;
+  background: #f0f3ee;
+  color: var(--ink-muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.month[aria-pressed="true"] {
+  background: var(--brand-strong);
+  color: var(--on-brand);
+}
+
+/* ───── Умови ───── */
+
+.checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.check input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--brand-strong);
+}
+
+/* ───── Архів ───── */
+
+.archiveButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 50px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-200);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.archiveButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.archiveText {
+  margin: 0 0 14px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-muted);
+}
+
+/* ───── Телефон: своя шапка й закріплена панель ───── */
+
+.mobileTop {
+  position: sticky;
+  top: 0;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--forest);
+  color: var(--ink-on-forest);
+}
+
+.mobileTopIcon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  color: var(--ink-on-forest);
+  text-decoration: none;
+}
+
+.mobileTopIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mobileTopView {
+  background: rgba(240, 243, 238, 0.1);
+}
+
+.mobileTopText {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileTopText small {
+  font-size: 12px;
+  color: var(--ink-on-forest-muted);
+}
+
+.mobileTopText strong {
+  overflow: hidden;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.mobileBar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 10px;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-200);
+}
+
+.mobileBar > * {
+  height: 52px;
+}
+
+/* ───── Комп'ютер ───── */
+
+@media (min-width: 900px) {
+  .content {
+    max-width: none;
+    margin: 0;
+    padding: 24px 36px 48px;
+  }
+
+  .back {
+    display: inline-flex;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    align-items: start;
+    gap: 20px;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  .card {
+    padding: 24px 22px;
+  }
+
+  /* На комп'ютері — порядок як у розмітці (Основне, Фото…; Статус, Сезон, Умови, Архів). */
+  .order1,
+  .order2,
+  .order3,
+  .order4,
+  .order5,
+  .order6,
+  .order7,
+  .order8 {
+    order: 0;
+  }
+
+  .mobileHint,
+  .mobileTop,
+  .mobileBar {
+    display: none;
+  }
+
+  .row2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .photoTile,
+  .addTile,
+  .spinnerTile {
+    width: 135px;
+    height: 135px;
+  }
+
+  .photos {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .sizeHead {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1.2fr 44px;
+    gap: 16px;
+    padding: 0 16px 10px;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .sizeRows {
+    gap: 0;
+  }
+
+  .sizeRow {
+    grid-template-columns: 1fr 1fr 1fr 1.2fr 44px;
+    align-items: start;
+    gap: 16px;
+    padding: 12px 16px;
+    border-radius: 0;
+    background: none;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .sizeHeight {
+    display: flex !important;
+  }
+
+  .sizeLabel {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .addSize {
+    width: auto;
+    padding: 0 18px;
+  }
+
+  .months {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .month {
+    height: 38px;
+    font-size: 13px;
+  }
+
+  .archiveButton {
+    width: auto;
+    padding: 0 18px;
+  }
+}
+
+/* Екран редагування на телефоні — без загальної шапки й нижніх вкладок (своя шапка й панель). */
+@media (max-width: 899px) {
+  :global(body:has([data-focus-screen])) [data-shell="mobile-header"],
+  :global(body:has([data-focus-screen])) [data-shell="tab-bar"] {
+    display: none;
+  }
+}

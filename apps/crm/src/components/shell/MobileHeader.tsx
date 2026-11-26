@@ -10,7 +10,7 @@ import styles from "./shell.module.css";
 /** Темна шапка на телефоні: логотип, дзвіночок, кружечок-ініціал (меню з «Вийти»). */
 export default function MobileHeader({ user }: { user: CurrentUser }) {
   return (
-    <header className={styles.mobileHeader}>
+    <header className={styles.mobileHeader} data-shell="mobile-header">
       <Link href="/dashboard" className={styles.mobileLogoLink}>
         <img
           src="/logo/yaremiia-logo-web-on-dark.svg"

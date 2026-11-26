@@ -223,6 +223,50 @@
   color: var(--ink);
 }
 
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.mobileAction {
+  flex-shrink: 0;
+}
+
+@media (min-width: 900px) {
+  .mobileAction {
+    display: none;
+  }
+}
+
+/* Кнопка-посилання другого рівня (біла з рамкою): «Переглянути на сайті». */
+.secondaryButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface-200);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.secondaryButton:hover {
+  border-color: var(--brand-strong);
+}
+
+.secondaryButton svg {
+  width: 18px;
+  height: 18px;
+}
+
 .dateLine {
   margin: 4px 0 0;
   font-size: 14px;
@@ -340,6 +384,8 @@
   align-items: center;
   gap: 10px;
   height: 44px;
+  border: 0;
+  cursor: pointer;
   padding: 0 20px;
   border-radius: 10px;
   background: var(--brand-strong);
