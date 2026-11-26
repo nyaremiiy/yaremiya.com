@@ -11,7 +11,6 @@
 import { cache } from "react";
 import {
   activity,
-  lowStock,
   newLeads,
   ordersToPrepare,
   pickupsToday,
@@ -21,16 +20,29 @@ import {
   todayMetrics,
 } from "./demo-data";
 import { demoDelay } from "./demo-delay";
+import { getLowStockSizes, getStockSummary } from "./plants-data";
 import { getTeam } from "./team";
 
+/** Показники: «Рослин у наявності» — з бази, решта поки демо. */
 export const getTodayMetrics = cache(async () => {
   await demoDelay(0.5);
-  return todayMetrics;
+  const stock = await getStockSummary();
+  return todayMetrics.map((m) =>
+    m.key === "stock"
+      ? {
+          ...m,
+          value: `${stock.inStock} з ${stock.total}`,
+          caption: `${stock.preorder} — передзамовлення`,
+          mobile: { ...m.mobile, value: `${stock.inStock}/${stock.total}` },
+        }
+      : m,
+  );
 });
 
+/** «Закінчуються» — розміри із залишком ≤ 5 (з бази). */
 export const getLowStock = cache(async () => {
   await demoDelay(0.7);
-  return lowStock;
+  return getLowStockSizes(3);
 });
 
 export const getNewLeads = cache(async () => {
@@ -60,5 +72,5 @@ export const getTeamMembers = cache(async () => {
 
 export const getWorkerToday = cache(async () => {
   await demoDelay(1);
-  return { orders: ordersToPrepare, stock: lowStock, pickupsToday };
+  return { orders: ordersToPrepare, stock: await getLowStockSizes(3), pickupsToday };
 });

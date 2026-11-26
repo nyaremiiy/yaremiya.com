@@ -13,9 +13,23 @@ import styles from "./shell.module.css";
 /**
  * Верхня панель сторінки.
  * Без `title` — привітання з датою (дашборд), з `title` — назва розділу.
- * На телефоні — без пошуку й кнопок (вони в шапці), лише заголовок.
+ * На телефоні — без пошуку й кнопок (вони в шапці), лише заголовок
+ * і, якщо передано, `mobileAction` (наприклад, «Додати»).
+ * `actions` замінюють типову кнопку «Нове замовлення».
  */
-export default function TopBar({ user, title }: { user: CurrentUser; title?: ReactNode }) {
+export default function TopBar({
+  user,
+  title,
+  subtitle,
+  actions,
+  mobileAction,
+}: {
+  user: CurrentUser;
+  title?: ReactNode;
+  subtitle?: ReactNode;
+  actions?: ReactNode;
+  mobileAction?: ReactNode;
+}) {
   const isGreeting = title === undefined;
   const today = formatToday();
   const note = user.role === "worker" ? "ось що треба зробити сьогодні" : seasonNote;
@@ -37,7 +51,13 @@ export default function TopBar({ user, title }: { user: CurrentUser; title?: Rea
             </p>
           </>
         ) : (
-          <h1 className={styles.pageTitle}>{title}</h1>
+          <>
+            <div className={styles.titleRow}>
+              <h1 className={styles.pageTitle}>{title}</h1>
+              {mobileAction && <div className={styles.mobileAction}>{mobileAction}</div>}
+            </div>
+            {subtitle && <p className={`${styles.dateLine} ${styles.subtitle}`}>{subtitle}</p>}
+          </>
         )}
       </div>
 
@@ -53,7 +73,9 @@ export default function TopBar({ user, title }: { user: CurrentUser; title?: Rea
           />
         </form>
         <BellButton className={styles.bell} />
-        {can(user.role, "createOrders") && (
+        {actions !== undefined ? (
+          actions
+        ) : can(user.role, "createOrders") && (
           <Link href="/orders" className={styles.primaryButton}>
             <Plus strokeWidth={1.75} aria-hidden="true" />
             Нове замовлення

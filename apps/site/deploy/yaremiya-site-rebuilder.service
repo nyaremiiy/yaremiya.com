@@ -1,0 +1,22 @@
+# Сервіс перезбирання сайту після змін у CRM (systemd).
+# Встановлення (на сервері):
+#   sudo cp /opt/yaremiya/apps/site/deploy/yaremiya-site-rebuilder.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now yaremiya-site-rebuilder
+# Журнал: journalctl -u yaremiya-site-rebuilder -f
+
+[Unit]
+Description=ЯРЕМІЯ: перезбирання сайту після змін у CRM
+After=network.target postgresql.service
+
+[Service]
+Type=simple
+# Користувач, від імені якого працює код (власник /opt/yaremiya і /var/www/yaremiya).
+User=yaremiya
+WorkingDirectory=/opt/yaremiya
+ExecStart=/usr/bin/node /opt/yaremiya/apps/site/deploy/site-rebuilder.mjs
+Restart=on-failure
+RestartSec=5
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+
+[Install]
+WantedBy=multi-user.target

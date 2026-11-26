@@ -99,3 +99,110 @@ export type NewUser = typeof users.$inferInsert;
 export type Session = typeof sessions.$inferSelect;
 export type AuditEntry = typeof auditLog.$inferInsert;
 export type Role = (typeof roleEnum.enumValues)[number];
+
+/* ───── Рослини (товари магазину; спільні для CRM і сайту) ───── */
+
+export const plantStatusEnum = pgEnum("plant_status", ["in_stock", "low", "preorder"]);
+
+export const categories = pgTable("categories", {
+  id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  sort: integer("sort").notNull().default(0),
+});
+
+/** Умови вирощування (позначки в CRM). */
+export type PlantConditions = {
+  sun?: boolean;
+  partShade?: boolean;
+  hardy?: boolean;
+};
+
+/**
+ * Рослини не видаляються — лише архівуються (`archived_at`).
+ * На сайті показуються лише `is_visible = true` і без `archived_at`.
+ */
+export const plants = pgTable(
+  "plants",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    /** Для адреси на сайті: з назви транслітом, унікальний. */
+    slug: text("slug").notNull().unique(),
+    name: text("name").notNull(),
+    latinName: text("latin_name"),
+    categoryId: integer("category_id")
+      .notNull()
+      .references(() => categories.id),
+    /** Для картки каталогу. */
+    shortDescription: text("short_description"),
+    description: text("description"),
+    care: text("care"),
+    status: plantStatusEnum("status").notNull().default("in_stock"),
+    isVisible: boolean("is_visible").notNull().default(false),
+    archivedAt: timestamp("archived_at", { withTimezone: true }),
+    /** Місяці продажу, 0 = січень. */
+    seasonMonths: integer("season_months").array().notNull().default(sql`'{}'::integer[]`),
+    conditions: jsonb("conditions").$type<PlantConditions>().notNull().default({}),
+    seoTitle: text("seo_title"),
+    seoDescription: text("seo_description"),
+    sort: integer("sort").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+    updatedBy: integer("updated_by").references(() => users.id, { onDelete: "set null" }),
+  },
+  (t) => [
+    index("plants_category_idx").on(t.categoryId),
+    check("plants_slug_format", sql`${t.slug} ~ '^[a-z0-9]+(-[a-z0-9]+)*$'`),
+  ],
+);
+
+/** Розміри: горщик, висота, ціна, залишок. */
+export const plantSizes = pgTable(
+  "plant_sizes",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    plantId: integer("plant_id")
+      .notNull()
+      .references(() => plants.id, { onDelete: "cascade" }),
+    /** «0,5 л», «касета». */
+    pot: text("pot").notNull(),
+    /** «10–15 см». */
+    height: text("height"),
+    /** Гривні, ціле; порожнє — «ціна навесні». */
+    price: integer("price"),
+    /** Порожнє або «шт» — для «/шт» на сайті. */
+    unit: text("unit"),
+    stock: integer("stock").notNull().default(0),
+    sort: integer("sort").notNull().default(0),
+  },
+  (t) => [
+    index("plant_sizes_plant_idx").on(t.plantId),
+    check("plant_sizes_stock_nonnegative", sql`${t.stock} >= 0`),
+    check("plant_sizes_price_nonnegative", sql`${t.price} IS NULL OR ${t.price} >= 0`),
+  ],
+);
+
+/** Фото: файли лежать у UPLOADS_DIR (поза репозиторієм), тут — лише шлях. */
+export const plantPhotos = pgTable(
+  "plant_photos",
+  {
+    id: integer("id").primaryKey().generatedAlwaysAsIdentity(),
+    plantId: integer("plant_id")
+      .notNull()
+      .references(() => plants.id, { onDelete: "cascade" }),
+    /** Основа шляху без розміру: `plants/12/ab12cd` → файли `…-1600.webp`, `…-800.webp`, `…-400.webp`. */
+    fileKey: text("file_key").notNull(),
+    alt: text("alt"),
+    width: integer("width").notNull(),
+    height: integer("height").notNull(),
+    /** 0 — головне. */
+    sort: integer("sort").notNull().default(0),
+  },
+  (t) => [index("plant_photos_plant_idx").on(t.plantId)],
+);
+
+export type Category = typeof categories.$inferSelect;
+export type Plant = typeof plants.$inferSelect;
+export type PlantSize = typeof plantSizes.$inferSelect;
+export type PlantPhoto = typeof plantPhotos.$inferSelect;
+export type PlantStatus = (typeof plantStatusEnum.enumValues)[number];

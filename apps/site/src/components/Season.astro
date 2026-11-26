@@ -5,6 +5,8 @@ import { season } from '../lib/data';
 // Місяць під час збірки — лише запасний варіант; у браузері скрипт нижче бере поточну дату.
 const buildMonth = new Date().getMonth();
 const inRange = (m: number, from: number, to: number) => m >= from && m <= to;
+const fmt = (from: number, to: number) =>
+  from === to ? season.monthsFull[from] : `${season.monthsFull[from]} – ${season.monthsFull[to]}`;
 const rowsCount = season.rows.length;
 ---
 
@@ -53,16 +55,16 @@ const rowsCount = season.rows.length;
                 <span>{r.kind}</span>
               </div>
               <div class="cal__track" aria-hidden="true" style={`grid-row:${i + 2}`}></div>
-              <div
-                class:list={['cal__bar', { 'is-now': inRange(buildMonth, r.from, r.to) }]}
-                data-from={r.from}
-                data-to={r.to}
-                style={`grid-column:${r.from + 2} / ${r.to + 3};grid-row:${i + 2}`}
-              >
-                <span>
-                  {season.monthsFull[r.from]} – {season.monthsFull[r.to]}
-                </span>
-              </div>
+              {r.segments.map((seg) => (
+                <div
+                  class:list={['cal__bar', { 'is-now': inRange(buildMonth, seg.from, seg.to) }]}
+                  data-from={seg.from}
+                  data-to={seg.to}
+                  style={`grid-column:${seg.from + 2} / ${seg.to + 3};grid-row:${i + 2}`}
+                >
+                  <span>{fmt(seg.from, seg.to)}</span>
+                </div>
+              ))}
             </>
           ))}
         </div>

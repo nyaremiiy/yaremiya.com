@@ -13,3 +13,4 @@ dist/
 # Next.js (CRM)
 next-env.d.ts
 *.tsbuildinfo
+/uploads/

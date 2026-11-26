@@ -11,7 +11,9 @@ export function initCatalog() {
     let shown = 0;
     buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
     cards.forEach((card) => {
-      const visible = filter === 'all' || card.dataset.category === filter;
+      // «rozsada» з головного екрана — уся розсада (rozsada-kvitiv, rozsada-ovochiv).
+      const cat = card.dataset.category ?? '';
+      const visible = filter === 'all' || cat === filter || cat.startsWith(`${filter}-`);
       card.hidden = !visible;
       if (visible) shown++;
     });

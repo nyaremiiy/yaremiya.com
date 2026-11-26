@@ -10,6 +10,8 @@
 #   4. залишає 5 останніх версій, щоб можна було швидко відкотитись.
 #
 # Відкотитись на попередню версію:  bash update-site.sh --rollback
+# Лише перезібрати (без git і встановлення; так робить сервіс після змін у CRM):
+#                                    bash update-site.sh --rebuild
 
 set -euo pipefail
 
@@ -29,13 +31,18 @@ if [[ "${1:-}" == "--rollback" ]]; then
   exit 0
 fi
 
-echo "→ Оновлюю код ($BRANCH)…"
 cd "$REPO_DIR"
-git fetch --quiet origin "$BRANCH"
-git reset --hard --quiet "origin/$BRANCH"
+if [[ "${1:-}" != "--rebuild" ]]; then
+  echo "→ Оновлюю код ($BRANCH)…"
+  git fetch --quiet origin "$BRANCH"
+  git reset --hard --quiet "origin/$BRANCH"
 
-echo "→ Встановлюю залежності…"
-pnpm install --frozen-lockfile
+  echo "→ Встановлюю залежності…"
+  pnpm install --frozen-lockfile
+
+  echo "→ Застосовую міграції бази…"
+  pnpm db:migrate
+fi
 
 echo "→ Збираю сайт…"
 pnpm --filter site build

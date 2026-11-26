@@ -11,7 +11,9 @@
     "db:migrate": "pnpm --filter @yaremiya/shared db:migrate",
     "db:seed": "pnpm --filter @yaremiya/shared db:seed",
     "db:create-admin": "pnpm --filter @yaremiya/shared db:create-admin",
-    "db:backup": "pnpm --filter @yaremiya/shared db:backup"
+    "db:backup": "pnpm --filter @yaremiya/shared db:backup",
+    "db:import-plants": "pnpm --filter @yaremiya/shared db:import-plants",
+    "site:rebuild": "pnpm --filter site build"
   },
   "packageManager": "pnpm@11.4.0"
 }
