@@ -6,12 +6,12 @@ import { CircleAlert, Eye, EyeOff, Info, Lock, LogIn } from "lucide-react";
 import { signIn } from "@/lib/auth";
 import styles from "./login.module.css";
 
-type FieldErrors = { email?: string; password?: string };
-type Status = "idle" | "submitting" | "invalid" | "not-connected";
+type FieldErrors = { login?: string; password?: string };
+type Status = "idle" | "submitting" | "invalid" | "unavailable";
 
 export default function LoginForm({ nextPath }: { nextPath: string }) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -19,7 +19,7 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [status, setStatus] = useState<Status>("idle");
 
-  const emailRef = useRef<HTMLInputElement>(null);
+  const loginRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const submitting = status === "submitting";
@@ -29,73 +29,77 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
     if (submitting) return;
 
     const next: FieldErrors = {};
-    if (!email.trim()) next.email = "Введіть e-mail";
+    if (!login.trim()) next.login = "Введіть логін";
     if (!password) next.password = "Введіть пароль";
     setErrors(next);
 
-    if (next.email || next.password) {
+    if (next.login || next.password) {
       setStatus("idle");
-      (next.email ? emailRef : passwordRef).current?.focus();
+      (next.login ? loginRef : passwordRef).current?.focus();
       return;
     }
 
     setStatus("submitting");
-    const result = await signIn(email.trim(), password, remember);
+    const result = await signIn(login.trim(), password, remember);
 
     if (result.ok) {
       // Кнопка лишається в стані «Входимо…», доки відкривається потрібна сторінка.
       router.push(nextPath);
       return;
     }
-    setStatus(result.error === "invalid-credentials" ? "invalid" : "not-connected");
+    setStatus(result.error === "invalid-credentials" ? "invalid" : "unavailable");
   }
 
+  // method="post": навіть якщо скрипти ще не завантажились, пароль не потрапить в адресу.
   return (
-    <form className={styles.form} onSubmit={handleSubmit} noValidate>
+    <form className={styles.form} method="post" onSubmit={handleSubmit} noValidate>
       <div className={styles.heading}>
         <h1 className={styles.title}>Вхід у CRM</h1>
         <p className={styles.subtitle}>
-          Увійдіть з e-mail і паролем, які вам видав адміністратор.
+          Увійдіть з логіном і паролем, які вам видав адміністратор.
         </p>
       </div>
 
       {status === "invalid" && (
         <div className={`${styles.notice} ${styles.noticeError}`} role="alert">
           <CircleAlert strokeWidth={1.75} aria-hidden="true" />
-          <p>Невірний e-mail або пароль. Перевірте дані або зверніться до адміністратора.</p>
+          <p>Невірний логін або пароль. Перевірте дані або зверніться до адміністратора.</p>
         </div>
       )}
 
-      {status === "not-connected" && (
+      {status === "unavailable" && (
         <div className={`${styles.notice} ${styles.noticeInfo}`} role="status">
           <Info strokeWidth={1.75} aria-hidden="true" />
-          <p>Вхід ще не підключено — це демо-версія сторінки.</p>
+          <p>Не вдалося з’єднатися з сервером. Спробуйте ще раз за хвилину.</p>
         </div>
       )}
 
       <div className={styles.field}>
-        <label className={styles.label} htmlFor="email">
-          E-mail
+        <label className={styles.label} htmlFor="login">
+          Логін
         </label>
         <input
-          ref={emailRef}
-          id="email"
-          name="email"
-          type="email"
+          ref={loginRef}
+          id="login"
+          name="login"
+          type="text"
           autoComplete="username"
-          placeholder="name@example.com"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          placeholder="Ваш логін"
           className={styles.input}
-          value={email}
+          value={login}
           onChange={(e) => {
-            setEmail(e.target.value);
-            if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+            setLogin(e.target.value);
+            if (errors.login) setErrors((prev) => ({ ...prev, login: undefined }));
           }}
-          aria-invalid={errors.email ? true : undefined}
-          aria-describedby={errors.email ? "email-error" : undefined}
+          aria-invalid={errors.login ? true : undefined}
+          aria-describedby={errors.login ? "login-error" : undefined}
         />
-        {errors.email && (
-          <p id="email-error" className={styles.fieldError}>
-            {errors.email}
+        {errors.login && (
+          <p id="login-error" className={styles.fieldError}>
+            {errors.login}
           </p>
         )}
       </div>

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { forbidden, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Sprout } from "lucide-react";
 import TopBar from "@/components/shell/TopBar";
 import styles from "@/components/shell/placeholder.module.css";
-import { getCurrentUser } from "@/lib/auth";
+import { getCurrentUser, requireSection } from "@/lib/session";
 import { canAccess, isSection, sectionTitle, type Section } from "@/lib/permissions";
 
 type Params = { params: Promise<{ section: string }> };
@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const section = resolveSection((await params).section);
   if (!section) return {};
   const user = await getCurrentUser();
+  if (!user) return {};
   return { title: canAccess(user.role, section) ? sectionTitle(section, user.role) : "Немає доступу" };
 }
 
@@ -24,9 +25,8 @@ export default async function SectionPage({ params }: Params) {
   const section = resolveSection((await params).section);
   if (!section) notFound();
 
-  const user = await getCurrentUser();
-  // Недозволений розділ → екран «Немає доступу» (forbidden.tsx) зі статусом 403.
-  if (!canAccess(user.role, section)) forbidden();
+  // Не увійшли → /login; недозволений розділ → «Немає доступу» (forbidden.tsx), 403.
+  const user = await requireSection(section);
 
   return (
     <>

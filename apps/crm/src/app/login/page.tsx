@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
+import { redirect } from "next/navigation";
 import { safeNextPath } from "@/lib/redirects";
+import { getCurrentUser } from "@/lib/session";
 import LoginForm from "./LoginForm";
 import styles from "./login.module.css";
 
@@ -15,6 +17,9 @@ export default async function LoginPage({
 }) {
   const { next } = await searchParams;
   const nextPath = safeNextPath(Array.isArray(next) ? next[0] : next);
+
+  // Уже увійшли — одразу далі.
+  if (await getCurrentUser()) redirect(nextPath);
 
   return (
     <div className={styles.page}>

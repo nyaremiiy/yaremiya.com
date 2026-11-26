@@ -20,11 +20,10 @@ import {
   recentOrdersMobileCount,
   salesByCategory,
   salesMonth,
-  team,
   todayMetrics,
-  type DemoUser,
-  type TeamMember,
 } from "@/lib/demo-data";
+import type { CurrentUser } from "@/lib/current-user";
+import type { TeamMember } from "@/lib/team";
 import { can, ROLE_LABELS } from "@/lib/permissions";
 import Group from "./Group";
 import { ACTIVITY_ICONS, Bar, METRIC_ICONS, RichText, StatusPill, toneClass } from "./parts";
@@ -35,7 +34,14 @@ import styles from "./dashboard.module.css";
  * Для комп'ютера й телефона групи різні (див. docs/dashboard.md), тому
  * дві розмітки; CSS показує одну з них (прихована не читається читалками).
  */
-export default function ManagerDashboard({ user }: { user: DemoUser }) {
+export default function ManagerDashboard({
+  user,
+  team = [],
+}: {
+  user: CurrentUser;
+  /** Лише для адміністратора — з бази. */
+  team?: TeamMember[];
+}) {
   const role = user.role;
   const metrics = todayMetrics.filter((m) => m.key !== "revenue" || can(role, "finance"));
   const showLeads = can(role, "clientContacts");

@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/lib/auth";
+import { requireUser } from "@/lib/session";
 import MobileHeader from "@/components/shell/MobileHeader";
 import Sidebar from "@/components/shell/Sidebar";
 import TabBar from "@/components/shell/TabBar";
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 /** Спільний каркас усіх розділів CRM (крім сторінки входу). */
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const user = await getCurrentUser();
+  const user = await requireUser();
 
   return (
     <div className={styles.app}>

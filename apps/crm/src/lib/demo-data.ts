@@ -1,26 +1,7 @@
 /**
- * Демонстраційні дані CRM — ЄДИНЕ місце. Потім їх замінить база PostgreSQL.
+ * Демонстраційні дані CRM — ЄДИНЕ місце. Потім їх замінить база PostgreSQL (користувачі й «Команда» — уже з бази).
  * Числа з пробілами пишемо з нерозривним пробілом ( ), щоб не переносились.
  */
-
-import type { Role } from "./permissions";
-
-/* ───── Користувачі ───── */
-
-export type DemoUser = {
-  id: string;
-  name: string;
-  /** Кличний відмінок для привітання: «Оксано». Без нього — просто «Доброго дня!». */
-  vocative?: string;
-  initial: string;
-  role: Role;
-};
-
-export const demoUsers: Record<Role, DemoUser> = {
-  admin: { id: "u-owner", name: "Власник", initial: "В", role: "admin" },
-  manager: { id: "u-manager", name: "Менеджер", initial: "М", role: "manager" },
-  worker: { id: "u-oksana", name: "Оксана", vocative: "Оксано", initial: "О", role: "worker" },
-};
 
 export const seasonNote = "зараз сезон хризантем і самшиту";
 
@@ -185,24 +166,6 @@ export const activity: ActivityEvent[] = [
 
 /** Скільки подій показувати на телефоні. */
 export const activityMobileCount = 4;
-
-/* ───── Команда (адмін) ───── */
-
-export type TeamMember = {
-  id: string;
-  name: string;
-  initial: string;
-  role: Role;
-  /** "online" — зелена крапка; "disabled" — доступ вимкнено; інакше — час останнього входу. */
-  status: "online" | "disabled" | { lastSeen: string };
-};
-
-export const team: TeamMember[] = [
-  { id: "u-owner", name: "Власник", initial: "В", role: "admin", status: "online" },
-  { id: "u-manager", name: "Менеджер", initial: "М", role: "manager", status: "online" },
-  { id: "u-oksana", name: "Оксана", initial: "О", role: "worker", status: { lastSeen: "вчора, 17:40" } },
-  { id: "u-ivan", name: "Іван", initial: "І", role: "worker", status: "disabled" },
-];
 
 /* ───── Працівник: справи на сьогодні ───── */
 

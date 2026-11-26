@@ -6,7 +6,12 @@
     "build": "pnpm --filter site build",
     "preview": "pnpm --filter site preview",
     "dev:crm": "pnpm --filter crm dev",
-    "build:crm": "pnpm --filter crm build"
+    "build:crm": "pnpm --filter crm build",
+    "db:generate": "pnpm --filter @yaremiya/shared db:generate",
+    "db:migrate": "pnpm --filter @yaremiya/shared db:migrate",
+    "db:seed": "pnpm --filter @yaremiya/shared db:seed",
+    "db:create-admin": "pnpm --filter @yaremiya/shared db:create-admin",
+    "db:backup": "pnpm --filter @yaremiya/shared db:backup"
   },
   "packageManager": "pnpm@11.4.0"
 }

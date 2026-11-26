@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { signOut } from "@/lib/auth";
 import { usePathname } from "next/navigation";
 import { LogOut } from "lucide-react";
-import type { DemoUser } from "@/lib/demo-data";
+import type { CurrentUser } from "@/lib/current-user";
 import { ROLE_LABELS } from "@/lib/permissions";
 import { isActive, navItems } from "./nav";
 import styles from "./shell.module.css";
 
 /** Бічне меню (комп'ютер). */
-export default function Sidebar({ user }: { user: DemoUser }) {
+export default function Sidebar({ user }: { user: CurrentUser }) {
   const pathname = usePathname();
   const items = navItems(user.role);
 
@@ -60,9 +61,11 @@ export default function Sidebar({ user }: { user: DemoUser }) {
           <span className={styles.userName}>{user.name}</span>
           <span className={styles.userRole}>{ROLE_LABELS[user.role]}</span>
         </span>
-        <Link href="/login" className={styles.logout} aria-label="Вийти" title="Вийти">
-          <LogOut strokeWidth={1.75} aria-hidden="true" />
-        </Link>
+        <form action={signOut}>
+          <button type="submit" className={styles.logout} aria-label="Вийти" title="Вийти">
+            <LogOut strokeWidth={1.75} aria-hidden="true" />
+          </button>
+        </form>
       </div>
     </aside>
   );

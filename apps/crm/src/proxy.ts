@@ -1,22 +1,28 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { DEMO_ROLE_COOKIE, isDemoRoleSwitchEnabled, isRole } from "@/lib/demo-role";
+import { PATH_HEADER, SESSION_COOKIE } from "@/lib/session-constants";
 
 /**
- * ЛИШЕ для демо в режимі розробки: `?role=admin|manager|worker`
- * запам'ятовується в cookie, щоб роль трималась при переходах по меню.
- * Це не захист маршрутів — у робочій збірці proxy нічого не робить.
+ * Швидка перевірка на вході: без cookie сесії — одразу на `/login?next=…`.
+ * Це лише перший фільтр. Справжня перевірка (чи сесія жива, чи користувач
+ * активний, які в нього права) — на сервері в кожній сторінці й дії
+ * (`src/lib/session.ts`).
  */
 export function proxy(request: NextRequest) {
-  if (!isDemoRoleSwitchEnabled) return NextResponse.next();
+  const { pathname, search } = request.nextUrl;
+  const isLogin = pathname === "/login" || pathname.startsWith("/login/");
 
-  const role = request.nextUrl.searchParams.get("role");
-  if (!isRole(role)) return NextResponse.next();
+  if (!isLogin && !request.cookies.has(SESSION_COOKIE)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "";
+    if (pathname !== "/") url.searchParams.set("next", pathname + search);
+    return NextResponse.redirect(url);
+  }
 
-  // Передаємо роль і в поточний запит, і зберігаємо на майбутні.
-  request.cookies.set(DEMO_ROLE_COOKIE, role);
-  const response = NextResponse.next({ request: { headers: request.headers } });
-  response.cookies.set({ name: DEMO_ROLE_COOKIE, value: role, path: "/", sameSite: "lax" });
-  return response;
+  // Передаємо сторінкам поточну адресу — щоб повернути сюди після входу.
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set(PATH_HEADER, pathname + search);
+  return NextResponse.next({ request: { headers: requestHeaders } });
 }
 
 export const config = {
