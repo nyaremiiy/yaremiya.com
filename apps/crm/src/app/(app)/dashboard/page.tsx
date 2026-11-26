@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import ManagerDashboard from "@/components/dashboard/ManagerDashboard";
 import WorkerDashboard from "@/components/dashboard/WorkerDashboard";
+import { WorkerSkeleton } from "@/components/dashboard/skeletons";
+import styles from "@/components/dashboard/dashboard.module.css";
+import Loadable from "@/components/loading/Loadable";
 import TopBar from "@/components/shell/TopBar";
+import { getWorkerToday } from "@/lib/dashboard-data";
 import { requireSection } from "@/lib/session";
-import { can } from "@/lib/permissions";
-import { getTeam } from "@/lib/team";
-import { lowStock, ordersToPrepare, pickupsToday } from "@/lib/demo-data";
 
 export const metadata: Metadata = {
   title: "Дашборд",
@@ -13,16 +14,30 @@ export const metadata: Metadata = {
 
 export default async function DashboardPage() {
   const user = await requireSection("dashboard");
-  const team = can(user.role, "teamActivity") ? await getTeam() : undefined;
 
   return (
     <>
       <TopBar user={user} />
       {user.role === "worker" ? (
-        <WorkerDashboard orders={ordersToPrepare} stock={lowStock} pickupsToday={pickupsToday} />
+        <Loadable
+          id="w-dashboard"
+          label="Завантажуємо справи на сьогодні…"
+          skeleton={
+            <div className={styles.content}>
+              <WorkerSkeleton />
+            </div>
+          }
+        >
+          <WorkerBlock />
+        </Loadable>
       ) : (
-        <ManagerDashboard user={user} team={team} />
+        <ManagerDashboard user={user} />
       )}
     </>
   );
+}
+
+async function WorkerBlock() {
+  const { orders, stock, pickupsToday } = await getWorkerToday();
+  return <WorkerDashboard orders={orders} stock={stock} pickupsToday={pickupsToday} />;
 }

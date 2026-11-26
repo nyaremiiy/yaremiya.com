@@ -13,12 +13,13 @@ import {
   Sun,
   TriangleAlert,
 } from "lucide-react";
+import Button from "@/components/loading/Button";
+import SaveStatus from "@/components/loading/SaveStatus";
 import { markOrderReady, updateStock } from "@/lib/actions";
+import { useAsyncAction } from "@/lib/use-async-action";
 import type { LowStockItem, OrderToPrepare } from "@/lib/demo-data";
 import Group from "./Group";
 import styles from "./dashboard.module.css";
-
-type SaveState = "idle" | "saving" | "saved";
 
 /** Дашборд Працівника — «справи на сьогодні». Без цін, виручки й контактів клієнтів. */
 export default function WorkerDashboard({
@@ -34,30 +35,26 @@ export default function WorkerDashboard({
   const [quantities, setQuantities] = useState<Record<string, number>>(() =>
     Object.fromEntries(stock.map((item) => [item.id, item.qty])),
   );
-  const [saveState, setSaveState] = useState<SaveState>("idle");
+  const save = useAsyncAction(updateStock);
 
   const toPrepare = orders.filter((o) => !ready.has(o.id)).length;
 
-  async function toggleReady(id: string) {
-    const next = !ready.has(id);
+  function setOrderReady(id: string, value: boolean) {
     setReady((prev) => {
       const copy = new Set(prev);
-      if (next) copy.add(id);
+      if (value) copy.add(id);
       else copy.delete(id);
       return copy;
     });
-    await markOrderReady(id, next);
   }
 
   function changeQty(id: string, delta: number) {
     setQuantities((prev) => ({ ...prev, [id]: Math.max(0, (prev[id] ?? 0) + delta) }));
-    setSaveState("idle");
+    save.reset();
   }
 
-  async function saveStock() {
-    setSaveState("saving");
-    await updateStock(stock.map((item) => ({ id: item.id, qty: quantities[item.id] ?? item.qty })));
-    setSaveState("saved");
+  function saveStock() {
+    void save.run(stock.map((item) => ({ id: item.id, qty: quantities[item.id] ?? item.qty })));
   }
 
   const counters = [
@@ -94,38 +91,14 @@ export default function WorkerDashboard({
           <Group id="w-prepare" icon={PackageCheck} title="Підготувати до видачі">
             <div className={`${styles.card} ${styles.workerCard}`}>
               <ul className={styles.dividedList}>
-                {orders.map((order) => {
-                  const isReady = ready.has(order.id);
-                  return (
-                    <li key={order.id} className={`${styles.prepareRow} ${isReady ? styles.prepareRowDone : ""}`}>
-                      <div className={styles.prepareText}>
-                        <p className={styles.prepareTitle}>
-                          <strong>{order.number}</strong>
-                          <span className={styles.prepareClient}>{order.client}</span>
-                        </p>
-                        <p className={styles.prepareItems}>{order.items}</p>
-                        <p className={styles.prepareDelivery}>
-                          <Clock strokeWidth={1.75} aria-hidden="true" />
-                          {order.delivery}
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        className={`${styles.readyButton} ${isReady ? styles.readyButtonDone : ""}`}
-                        aria-pressed={isReady}
-                        onClick={() => toggleReady(order.id)}
-                      >
-                        {isReady ? (
-                          <CheckCheck strokeWidth={1.75} aria-hidden="true" />
-                        ) : (
-                          <Check strokeWidth={1.75} aria-hidden="true" />
-                        )}
-                        {isReady ? "Готово" : "Позначити готовим"}
-                        <span className="visually-hidden">: замовлення {order.number}</span>
-                      </button>
-                    </li>
-                  );
-                })}
+                {orders.map((order) => (
+                  <PrepareRow
+                    key={order.id}
+                    order={order}
+                    isReady={ready.has(order.id)}
+                    onReadyChange={(value) => setOrderReady(order.id, value)}
+                  />
+                ))}
               </ul>
             </div>
           </Group>
@@ -179,23 +152,10 @@ export default function WorkerDashboard({
                   );
                 })}
               </ul>
-              <button
-                type="button"
-                className={styles.saveButton}
-                onClick={saveStock}
-                disabled={saveState === "saving"}
-                aria-busy={saveState === "saving" || undefined}
-              >
-                {saveState === "saving" ? "Зберігаємо…" : "Зберегти залишки"}
-              </button>
-              <p role="status" className={styles.saveStatus}>
-                {saveState === "saved" && (
-                  <>
-                    <CheckCheck strokeWidth={1.75} aria-hidden="true" />
-                    Залишки збережено
-                  </>
-                )}
-              </p>
+              <Button className={styles.saveButton} onClick={saveStock} loading={save.pending} loadingText="Зберігаємо…">
+                Зберегти залишки
+              </Button>
+              <SaveStatus status={save.status} onRetry={save.retry} className={styles.saveStatus} />
             </div>
           </Group>
         </div>
@@ -207,5 +167,61 @@ export default function WorkerDashboard({
         </p>
       </div>
     </div>
+  );
+}
+
+/** Замовлення до видачі: кнопка чекає відповіді сервера, при помилці — «Спробувати ще». */
+function PrepareRow({
+  order,
+  isReady,
+  onReadyChange,
+}: {
+  order: OrderToPrepare;
+  isReady: boolean;
+  onReadyChange: (value: boolean) => void;
+}) {
+  const action = useAsyncAction(markOrderReady);
+
+  async function toggle() {
+    const next = !isReady;
+    if (await action.run(order.id, next)) onReadyChange(next);
+  }
+
+  return (
+    <li className={`${styles.prepareRow} ${isReady ? styles.prepareRowDone : ""}`}>
+      <div className={styles.prepareText}>
+        <p className={styles.prepareTitle}>
+          <strong>{order.number}</strong>
+          <span className={styles.prepareClient}>{order.client}</span>
+        </p>
+        <p className={styles.prepareItems}>{order.items}</p>
+        <p className={styles.prepareDelivery}>
+          <Clock strokeWidth={1.75} aria-hidden="true" />
+          {order.delivery}
+        </p>
+        <SaveStatus
+          status={action.status === "error" ? "error" : "idle"}
+          onRetry={action.retry}
+          className={styles.rowStatus}
+        />
+      </div>
+      <Button
+        className={`${styles.readyButton} ${isReady ? styles.readyButtonDone : ""}`}
+        aria-pressed={isReady}
+        onClick={toggle}
+        loading={action.pending}
+        loadingText={isReady ? "Знімаємо…" : "Позначаємо…"}
+        icon={
+          isReady ? (
+            <CheckCheck strokeWidth={1.75} aria-hidden="true" />
+          ) : (
+            <Check strokeWidth={1.75} aria-hidden="true" />
+          )
+        }
+      >
+        {isReady ? "Готово" : "Позначити готовим"}
+        <span className="visually-hidden">: замовлення {order.number}</span>
+      </Button>
+    </li>
   );
 }

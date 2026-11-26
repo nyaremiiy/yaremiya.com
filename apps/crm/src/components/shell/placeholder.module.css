@@ -70,3 +70,18 @@
     padding-top: 18vh;
   }
 }
+
+/* Місце для таблиці розділу (і її скелетона). */
+.tableArea {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 28px;
+}
+
+@media (min-width: 900px) {
+  .tableArea {
+    max-width: none;
+    margin: 0;
+    padding: 28px 36px 48px;
+  }
+}

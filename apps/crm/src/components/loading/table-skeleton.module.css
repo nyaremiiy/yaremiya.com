@@ -1,0 +1,90 @@
+/* Скелетон таблиці (loading.md → «Таблиці й списки»). */
+
+.card {
+  padding: 4px 18px;
+  background: var(--surface-200);
+  border-radius: 18px;
+  box-shadow: var(--card-shadow);
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 0;
+}
+
+.row + .row {
+  border-top: 1px solid var(--border-soft);
+}
+
+.cell {
+  min-width: 0;
+}
+
+/* Телефон: лише головне — назва в два рядки й пігулка. */
+.cell_short,
+.cell_wide {
+  display: none;
+}
+
+.cell_twolines,
+.cell_photo {
+  flex: 1;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.photoCell {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Комп'ютер: справжня сітка колонок (як у таблиці). */
+@media (min-width: 900px) {
+  .card {
+    padding: 0 22px;
+  }
+
+  .table {
+    display: grid;
+  }
+
+  .row {
+    display: contents;
+  }
+
+  .cell {
+    display: flex;
+    align-items: center;
+    min-height: 78px;
+    padding: 12px 32px 12px 0;
+  }
+
+  .cell:last-child {
+    padding-right: 0;
+  }
+
+  /* Лінія між рядками — по клітинках (рядок має display: contents). */
+  .row + .row > .cell {
+    border-top: 1px solid var(--border-soft);
+  }
+
+  .cell_short,
+  .cell_wide {
+    display: flex;
+  }
+}

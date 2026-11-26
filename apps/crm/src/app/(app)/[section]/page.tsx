@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Sprout } from "lucide-react";
 import TopBar from "@/components/shell/TopBar";
 import styles from "@/components/shell/placeholder.module.css";
+import { demoDelay } from "@/lib/demo-delay";
 import { getCurrentUser, requireSection } from "@/lib/session";
 import { canAccess, isSection, sectionTitle, type Section } from "@/lib/permissions";
 
@@ -27,6 +28,8 @@ export default async function SectionPage({ params }: Params) {
 
   // Не увійшли → /login; недозволений розділ → «Немає доступу» (forbidden.tsx), 403.
   const user = await requireSection(section);
+  // Лише для перевірки скелетона в режимі розробки (DEMO_DELAY_MS).
+  await demoDelay(1);
 
   return (
     <>
