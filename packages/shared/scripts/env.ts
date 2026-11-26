@@ -18,3 +18,12 @@ export function requireEnv(name: string): string {
   }
   return value;
 }
+
+/** Текст помилки разом із причиною (Drizzle ховає відповідь PostgreSQL у `cause`). */
+export function errorText(err: unknown): string {
+  const e = err as Error & { cause?: { message?: string } };
+  const cause = e.cause?.message;
+  // Перший рядок без параметрів запиту — щоб у вивід не потрапили дані.
+  const main = String(e.message ?? e).split("\nparams:")[0];
+  return cause ? `${main}\n  Причина: ${cause}` : main;
+}
