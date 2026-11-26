@@ -1174,3 +1174,8 @@
     grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
   }
 }
+
+/* Помилка в рядку замовлення («Не вдалося зберегти. Спробувати ще») — під текстом, ліворуч. */
+.rowStatus:not(:empty) {
+  margin-top: 10px;
+}

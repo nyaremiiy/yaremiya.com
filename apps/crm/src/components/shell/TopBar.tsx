@@ -5,6 +5,7 @@ import type { CurrentUser } from "@/lib/current-user";
 import { seasonNote } from "@/lib/demo-data";
 import { formatToday } from "@/lib/format";
 import { can } from "@/lib/permissions";
+import ProgressBar from "@/components/loading/ProgressBar";
 import BellButton from "./BellButton";
 import RolePill from "./RolePill";
 import styles from "./shell.module.css";
@@ -59,6 +60,7 @@ export default function TopBar({ user, title }: { user: CurrentUser; title?: Rea
           </Link>
         )}
       </div>
+      <ProgressBar placement="topBar" />
     </header>
   );
 }

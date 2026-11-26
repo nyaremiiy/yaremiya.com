@@ -1,0 +1,251 @@
+/* Стани завантаження — специфікація: apps/crm/docs/loading.md. */
+
+/* ───── Сірі блоки-скелетони ───── */
+
+.skeleton {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #dfe6da;
+  border-radius: 7px;
+}
+
+/* Перелив: смуга проходить зліва направо за 1,4 с (лише transform). */
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-100%);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Рядок фіксованої висоти, у якому по центру — смужка (щоб висота = справжньому тексту). */
+.line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ───── Область, що вантажиться ───── */
+
+/* З'являється лише через 300 мс (затримку можна перевизначити inline-стилем). */
+.pending {
+  min-width: 0;
+  animation: appear 1ms linear 300ms both;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Обгортка справжнього вмісту не впливає на розкладку. */
+.reveal {
+  display: contents;
+}
+
+.reveal[hidden] {
+  display: none;
+}
+
+/* ───── Смужка прогресу ───── */
+
+.progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  z-index: 20;
+  height: 3px;
+  overflow: hidden;
+  background: var(--surface-300);
+  pointer-events: none;
+}
+
+.progress[data-visible="false"] {
+  display: none;
+}
+
+.progressRunner {
+  width: 40%;
+  height: 100%;
+  background: var(--brand-strong);
+  transform: translateX(-100%);
+  animation: run 1.6s ease-in-out infinite;
+}
+
+@keyframes run {
+  to {
+    transform: translateX(250%);
+  }
+}
+
+/* Під шапкою на телефоні: смужка закріплена зверху при прокрутці. */
+.progressSlot {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: 0;
+}
+
+.progressSlot .progress {
+  top: 0;
+  bottom: auto;
+}
+
+@media (min-width: 900px) {
+  .progressSlot {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .progressInTopBar {
+    display: none;
+  }
+}
+
+/* ───── Кнопка з очікуванням ───── */
+
+.labels {
+  display: inline-grid;
+  gap: inherit;
+}
+
+.idle,
+.busy {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+
+.busy {
+  gap: 8px;
+  visibility: hidden;
+}
+
+/* Крутилка й «…ємо» з'являються лише через 300 мс; ширина — за довшим з написів. */
+.loading .idle {
+  animation: hideLabel 1ms linear 300ms both;
+}
+
+.loading .busy {
+  animation: showLabel 1ms linear 300ms both;
+}
+
+@keyframes hideLabel {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes showLabel {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+.loading {
+  cursor: progress !important;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  border: 2.5px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ───── «Збережено» / «Не вдалося зберегти» ───── */
+
+.status {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 36px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.status svg {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.saved {
+  background: #e6f0de;
+  color: #3f6130;
+}
+
+.failed {
+  background: var(--error-bg);
+  color: var(--error-text);
+}
+
+.retry {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* ───── Менше руху ───── */
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after,
+  .progressRunner,
+  .spinner {
+    animation: none;
+  }
+
+  .skeleton::after {
+    display: none;
+  }
+
+  .progressRunner {
+    transform: none;
+  }
+}

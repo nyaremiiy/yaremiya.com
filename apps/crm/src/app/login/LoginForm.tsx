@@ -3,7 +3,9 @@
 import { useRef, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { CircleAlert, Eye, EyeOff, Info, Lock, LogIn } from "lucide-react";
-import { signIn } from "@/lib/auth";
+import Button from "@/components/loading/Button";
+import { signIn, type SignInResult } from "@/lib/auth";
+import { ACTION_TIMEOUT_MS } from "@/lib/loading-store";
 import styles from "./login.module.css";
 
 type FieldErrors = { login?: string; password?: string };
@@ -40,7 +42,14 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
     }
 
     setStatus("submitting");
-    const result = await signIn(login.trim(), password, remember);
+    // Сервер мовчить 15 с — показуємо помилку, а не крутимо вічно.
+    const timeout = new Promise<SignInResult>((resolve) =>
+      setTimeout(() => resolve({ ok: false, error: "unavailable" }), ACTION_TIMEOUT_MS),
+    );
+    const result = await Promise.race([
+      signIn(login.trim(), password, remember).catch((): SignInResult => ({ ok: false, error: "unavailable" })),
+      timeout,
+    ]);
 
     if (result.ok) {
       // Кнопка лишається в стані «Входимо…», доки відкривається потрібна сторінка.
@@ -175,15 +184,15 @@ export default function LoginForm({ nextPath }: { nextPath: string }) {
         Запам’ятати мене на цьому пристрої
       </label>
 
-      <button
+      <Button
         type="submit"
         className={styles.submit}
-        aria-busy={submitting || undefined}
-        disabled={submitting}
+        loading={submitting}
+        loadingText="Входимо…"
+        icon={<LogIn strokeWidth={1.75} aria-hidden="true" />}
       >
-        <LogIn strokeWidth={1.75} aria-hidden="true" />
-        {submitting ? "Входимо…" : "Увійти"}
-      </button>
+        Увійти
+      </Button>
 
       <div className={styles.noRegistration}>
         <span className={styles.lockCircle} aria-hidden="true">

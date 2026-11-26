@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import ProgressBar, { NavigationWatcher } from "@/components/loading/ProgressBar";
+import { UserProvider } from "@/components/shell/UserProvider";
 import { requireUser } from "@/lib/session";
 import MobileHeader from "@/components/shell/MobileHeader";
 import Sidebar from "@/components/shell/Sidebar";
@@ -13,18 +16,24 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const user = await requireUser();
 
   return (
-    <div className={styles.app}>
-      <a href="#content" className={styles.skipLink}>
-        Перейти до вмісту
-      </a>
-      <Sidebar user={user} />
-      <div className={styles.column}>
-        <MobileHeader user={user} />
-        <main id="content" className={styles.main} tabIndex={-1}>
-          {children}
-        </main>
-        <TabBar role={user.role} />
+    <UserProvider user={user}>
+      <div className={styles.app}>
+        <a href="#content" className={styles.skipLink}>
+          Перейти до вмісту
+        </a>
+        <Sidebar user={user} />
+        <div className={styles.column}>
+          <MobileHeader user={user} />
+          <ProgressBar placement="header" />
+          <main id="content" className={styles.main} tabIndex={-1}>
+            {children}
+          </main>
+          <TabBar role={user.role} />
+        </div>
+        <Suspense fallback={null}>
+          <NavigationWatcher />
+        </Suspense>
       </div>
-    </div>
+    </UserProvider>
   );
 }
