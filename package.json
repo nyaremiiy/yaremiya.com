@@ -15,5 +15,13 @@
     "db:import-plants": "pnpm --filter @yaremiya/shared db:import-plants",
     "site:rebuild": "pnpm --filter site build"
   },
-  "packageManager": "pnpm@11.4.0"
+  "packageManager": "pnpm@11.4.0",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.14.0",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {}
 }
