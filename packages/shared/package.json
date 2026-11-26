@@ -6,7 +6,10 @@
   "exports": {
     "./db": "./src/db/index.ts",
     "./db/schema": "./src/db/schema.ts",
-    "./users": "./src/users.ts"
+    "./users": "./src/users.ts",
+    "./plants": "./src/plants.ts",
+    "./media": "./src/media.ts",
+    "./slug": "./src/slug.ts"
   },
   "scripts": {
     "db:generate": "drizzle-kit generate",
@@ -14,14 +17,18 @@
     "db:seed": "tsx scripts/seed.ts",
     "db:create-admin": "tsx scripts/create-admin.ts",
     "db:backup": "tsx scripts/backup.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:import-plants": "tsx scripts/import-plants.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.2",
     "drizzle-orm": "^0.45.4",
-    "postgres": "^4.1.1"
+    "heic-convert": "^2.1.0",
+    "postgres": "^4.1.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
+    "@types/heic-convert": "^2.1.1",
     "@types/node": "^26.6.7",
     "drizzle-kit": "^0.31.11",
     "tsx": "^4.23.15",
