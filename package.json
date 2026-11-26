@@ -13,7 +13,8 @@
     "db:create-admin": "pnpm --filter @yaremiya/shared db:create-admin",
     "db:backup": "pnpm --filter @yaremiya/shared db:backup",
     "db:import-plants": "pnpm --filter @yaremiya/shared db:import-plants",
-    "site:rebuild": "pnpm --filter site build"
+    "site:rebuild": "pnpm --filter site build",
+    "preview:stop": "pnpm --filter site exec astro preview stop"
   },
   "packageManager": "pnpm@11.4.0",
   "devEngines": {
